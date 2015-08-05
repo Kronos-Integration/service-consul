@@ -9,7 +9,8 @@ const assert = chai.assert;
 const expect = chai.expect;
 const should = chai.should();
 
-const kronos = require('../lib/manager.js');
+const kronos = require('kronos-service-manager');
+const consul = require('../lib/manager.js');
 
 describe('service manager', function () {
   const flowDecl = {
@@ -31,9 +32,9 @@ describe('service manager', function () {
 
   describe('creation', function (done) {
     it('promise should be fulfilled', function () {
-      kronos.manager({
+      consul.manager(kronos.manager({
         flows: flowDecl
-      }).should.be.fulfilled.notify(done);
+      })).should.be.fulfilled.notify(done);
     });
   });
 });

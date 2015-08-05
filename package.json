@@ -13,17 +13,12 @@
     "chai": "3.2.0",
     "chai-as-promised": "5.1.0",
     "istanbul-harmony": "0.3.16",
-    "mocha": "2.2.5",
-    "supertest": "^1.0.1"
+    "mocha": "2.2.5"
   },
   "dependencies": {
     "consul": "0.15.0",
-    "koa": "0.21.0",
-    "koa-jwt": "^1.1.1",
-    "koa-route": "^2.4.2",
-    "koa-websocket": "^1.0.0",
     "kronos-service-manager": "git+ssh://donkey@mfelten.de/Groups/donkey/git/kronos-service-manager.git",
-    "raw-body": "^2.1.2"
+    "kronos-service-manager-rest": "git+ssh://donkey@mfelten.de/Groups/donkey/git/kronos-service-manager-rest.git"
   },
   "repository": {
     "type": "git",
