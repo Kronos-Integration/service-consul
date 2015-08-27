@@ -18,7 +18,7 @@
     "mocha-html-reporter": "^0.0.1"
   },
   "dependencies": {
-    "consul": "0.15.0",
+    "consul": "^0.16.0",
     "kronos-service-manager": "git+ssh://donkey@mfelten.de/Groups/donkey/git/kronos-service-manager.git",
     "kronos-service-manager-rest": "git+ssh://donkey@mfelten.de/Groups/donkey/git/kronos-service-manager-rest.git"
   },
