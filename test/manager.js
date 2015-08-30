@@ -32,8 +32,9 @@ describe('service manager', function () {
 
   describe('creation', function (done) {
     it('promise should be fulfilled', function () {
-      consul.manager(kronos.manager({
-        flows: flowDecl
+      consul.manager(kronos.manager().then(function (manager) {
+        manager.registerFlows(flowDecl);
+        return manager;
       })).should.be.fulfilled.notify(done);
     });
   });
