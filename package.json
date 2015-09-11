@@ -27,6 +27,6 @@
     "url": "ssh://donkey@mfelten.de/Groups/donkey/git/consul-service-manager.git"
   },
   "engines": {
-    "iojs": ">=2.5.0"
+    "node": ">=4.0.0"
   }
 }
