@@ -1,0 +1,15 @@
+
+
+image:https://img.shields.io/npm/v/kronos-consul-service-manager.svg[npm,link=https://www.npmjs.com/package/kronos-consul-service-manager]
+image:https://secure.travis-ci.org/arlac77/kronos-consul-service-manager.png[Build Status,link=http://travis-ci.org/arlac77/kronos-consul-service-manager]
+image:https://david-dm.org/arlac77/kronos-consul-service-manager.svg[Dependency Status,link=https://david-dm.org/arlac77/kronos-consul-service-manager]
+image:https://david-dm.org/arlac77/kronos-consul-service-manager/dev-status.svg[devDependency Status,link=https://david-dm.org/arlac77/kronos-consul-service-manager#info=devDependencies]
+
+=== Install
+[source,bash]
+----
+$ npm install kronos-consul-service-manager
+----
+
+=== License
+BSD-2-Clause
