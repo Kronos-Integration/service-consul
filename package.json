@@ -11,10 +11,10 @@
   "author": "Markus Felten <markus.felten@gmx.de>",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "3.2.0",
+    "chai": "3.3.0",
     "chai-as-promised": "5.1.0",
     "istanbul-harmony": "0.3.16",
-    "mocha": "^2.3.2",
+    "mocha": "2.3.3",
     "mocha-html-reporter": "^0.0.1"
   },
   "dependencies": {
