@@ -5,7 +5,8 @@
   "main": "lib/manager.js",
   "scripts": {
     "cover": "node --harmony ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports test",
-    "test": "mocha --harmony test/*.js"
+    "test": "mocha --harmony test/*.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "contributors": [{
     "name": "Torsten Link",
@@ -19,7 +20,8 @@
     "chai": "3.4.1",
     "chai-as-promised": "5.1.0",
     "istanbul": "0.4.0",
-    "mocha": "2.3.4"
+    "mocha": "2.3.4",
+    "semantic-release": "6.0.3"
   },
   "dependencies": {
     "consul": "0.18.1",
