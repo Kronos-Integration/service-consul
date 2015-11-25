@@ -3,29 +3,28 @@
 
 "use strict";
 
-const chai = require('chai');
-chai.use(require("chai-as-promised"));
-const assert = chai.assert;
-const expect = chai.expect;
-const should = chai.should();
+const chai = require('chai'),
+  assert = chai.assert,
+  expect = chai.expect,
+  should = chai.should();
+chai.use(require('chai-as-promised'));
 
-const kronos = require('kronos-service-manager');
-const consul = require('../lib/manager.js');
+const kronos = require('kronos-service-manager'),
+  consul = require('../lib/manager.js');
 
 describe('service manager', function () {
   const flowDecl = {
-    "flow1": {
-      "steps": {
-        "s1": {
-          "type": "kronos-copy",
-          "config": {
-            "key1": "value1"
-          },
-          "endpoints": {
-            "in": "stdin",
-            "out": "stdout"
-          }
+    "name": "flow1",
+    "type": "kronos-flow",
+    "steps": {
+      "s1": {
+        "type": "kronos-stdin",
+        "endpoints": {
+          "out": "s2"
         }
+      },
+      "s2": {
+        "type": "kronos-stdout"
       }
     }
   };
@@ -33,7 +32,9 @@ describe('service manager', function () {
   describe('creation', function (done) {
     it('promise should be fulfilled', function () {
       consul.manager(kronos.manager().then(function (manager) {
-        manager.registerFlows(flowDecl);
+        console.log('registerFlow: A');
+        manager.registerFlow(manager.getStepInstance(flowDecl));
+        console.log('registerFlow: B');
         return manager;
       })).should.be.fulfilled.notify(done);
     });
