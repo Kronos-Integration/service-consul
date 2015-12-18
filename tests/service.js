@@ -18,7 +18,12 @@ const srv = http.createServer(function (req, res) {
   res.writeHead(200, {
     'Content-Type': 'text/plain'
   });
-  res.end('okay');
+
+  console.log("got request");
+
+  setTimeout(
+    () => res.end('okay'), 500);
+  //res.end('okay');
 });
 
 srv.listen(8500, '127.0.0.1');
@@ -29,8 +34,6 @@ describe('consul service', function () {
       function (manager) {
         describe('create', function () {
           try {
-            console.log("AA");
-
             service.registerWithManager(manager);
             const cs = manager.serviceGet('consul');
 
@@ -51,3 +54,6 @@ describe('consul service', function () {
   });
 
 });
+
+
+srv.close();
