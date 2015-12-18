@@ -42,9 +42,9 @@ describe('consul service', function () {
 
             cs.start().then(f => {
               assert.equal(cs.state, "running");
+              console.log(`${JSON.stringify(cs.tags)}`);
               done();
             }, done);
-            //done();
           } catch (err) {
             done(err);
           }
