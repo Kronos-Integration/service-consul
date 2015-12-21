@@ -29,7 +29,7 @@
   "dependencies": {
     "consul": "0.20.0",
     "kronos-service": "^1.1.0",
-    "kronos-service-manager": "2.3.0"
+    "kronos-service-manager": "2.4.0"
   },
   "repository": {
     "type": "git",
