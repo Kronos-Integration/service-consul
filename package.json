@@ -1,8 +1,9 @@
 {
   "name": "kronos-service-manager-consul",
   "version": "0.0.0",
-  "description": "kronos server manager with consul integration",
+  "description": "kronos service to integrate with consul",
   "main": "lib/consulService.js",
+  "tags": "kronos-service",
   "scripts": {
     "cover": "node --harmony ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests",
     "test": "mocha --harmony tests/*.js",
