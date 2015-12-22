@@ -38,7 +38,7 @@ describe('consul service', function () {
             const cs = manager.serviceGet('consul');
 
             assert.equal(cs.name, "consul");
-            assert.equal(cs.state, "stopped");
+            assert.equal(cs.state, "starting");
 
             cs.start().then(f => {
               assert.equal(cs.state, "running");
