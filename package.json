@@ -25,7 +25,7 @@
     "istanbul": "0.4.1",
     "mocha": "2.3.4",
     "semantic-release": "6.0.3",
-    "kronos-service-manager": "2.4.0"
+    "kronos-service-manager": "2.5.1"
   },
   "dependencies": {
     "consul": "0.20.0",
