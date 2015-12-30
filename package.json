@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "consul": "0.22.0",
-    "kronos-service": "^1.5.1"
+    "kronos-service": "^1.6.0"
   },
   "repository": {
     "type": "git",
