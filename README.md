@@ -20,7 +20,7 @@ install
 
 With [npm](http://npmjs.org) do:
 
-```
+```shell
 npm install kronos-service-manager-consul
 ```
 
