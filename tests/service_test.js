@@ -34,7 +34,10 @@ describe('consul service', function () {
       function (manager) {
         describe('create', function () {
           try {
+            require('kronos-koa-service').registerWithManager(manager);
+            require('kronos-health-check-service').registerWithManager(manager);
             service.registerWithManager(manager);
+
             const cs = manager.serviceGet('consul');
 
             assert.equal(cs.name, "consul");
