@@ -11,25 +11,28 @@
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "contributors": [{
-    "name": "Torsten Link",
-    "email": "torstenlink@gmx.de"
-  }, {
-    "name": "Markus Felten",
-    "email": "markus.felten@gmx.de"
-  }],
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
   "devDependencies": {
     "chai": "3.4.1",
     "chai-as-promised": "5.2.0",
     "istanbul": "0.4.1",
+    "kronos-service-manager": "^2.13.1",
     "mocha": "2.3.4",
-    "semantic-release": "6.0.3",
-    "kronos-service-manager": "2.12.1"
+    "semantic-release": "6.0.3"
   },
   "dependencies": {
     "consul": "0.22.0",
-    "kronos-health-check-service": "^1.0.0",
+    "kronos-health-check-service": "^1.0.1",
     "kronos-service": "^1.6.3"
   },
   "repository": {
