@@ -35,7 +35,7 @@ describe('consul service', function () {
         describe('create', function () {
           try {
             require('kronos-koa-service').registerWithManager(manager);
-            require('kronos-health-check-service').registerWithManager(manager);
+            require('kronos-service-health-check').registerWithManager(manager);
             service.registerWithManager(manager);
 
             const cs = manager.serviceGet('consul');
