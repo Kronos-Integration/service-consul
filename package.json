@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "consul": "0.22.0",
-    "kronos-service-health-check": "^1.0.1",
+    "kronos-service-health-check": "^1.1.0",
     "kronos-service": "^1.6.3"
   },
   "repository": {
