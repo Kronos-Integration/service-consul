@@ -8,7 +8,7 @@ branches:
 cache:
   directories:
     - node_modules
-    - tests/travis
+#    - tests/travis
 notifications:
   email:
     - torstenlink@gmx.de
