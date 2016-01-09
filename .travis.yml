@@ -8,6 +8,7 @@ branches:
 cache:
   directories:
     - node_modules
+    - tests/travis
 notifications:
   email:
     - torstenlink@gmx.de
@@ -16,6 +17,7 @@ before_install:
   - npm i -g npm@latest
 before_script:
   - npm prune
+  - ./tests/travis/start_consul.sh
 script:
   - npm run-script cover
 after_script:
