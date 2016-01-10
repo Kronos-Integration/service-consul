@@ -8,3 +8,4 @@ tests
 .tmp
 .gitignore
 .npmrc
+.travis.yml
