@@ -9,3 +9,4 @@ tests
 .gitignore
 .npmrc
 .travis.yml
+.npmignore
