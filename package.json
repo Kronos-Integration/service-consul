@@ -28,7 +28,7 @@
     "cz-conventional-changelog": "^1.1.5",
     "istanbul": "0.4.2",
     "kronos-service-manager": "^2.13.1",
-    "mocha": "2.4.4",
+    "mocha": "2.4.5",
     "semantic-release": "6.0.3"
   },
   "dependencies": {
