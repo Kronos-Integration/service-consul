@@ -33,7 +33,7 @@
     "consul": "0.23.0",
     "kronos-service": "^2.0.2",
     "kronos-service-health-check": "2.0.0",
-    "kronos-service-koa": "2.0.0"
+    "kronos-service-koa": "2.0.1"
   },
   "repository": {
     "type": "git",
