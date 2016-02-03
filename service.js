@@ -152,4 +152,10 @@ class ServiceConsul extends ServiceKOA {
 	}
 }
 
-module.exports.registerWithManager = manager => manager.registerServiceFactory(ServiceConsul);
+module.exports.registerWithManager = manager =>
+	manager.registerServiceFactory(ServiceConsul).then(sf =>
+		manager.declareService({
+			'type': sf.name,
+			'name': sf.name,
+			'port': 4712
+		}));

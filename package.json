@@ -11,16 +11,13 @@
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "devDependencies": {
     "chai": "^3.5.0",
@@ -32,7 +29,7 @@
   "dependencies": {
     "consul": "0.23.0",
     "kronos-service": "^2.1.1",
-    "kronos-service-health-check": "2.0.0",
+    "kronos-service-health-check": "2.0.1",
     "kronos-service-koa": "2.0.2"
   },
   "repository": {
@@ -40,7 +37,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=4.2.1"
+    "node": ">=5"
   },
   "config": {
     "commitizen": {
