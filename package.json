@@ -1,15 +1,16 @@
 {
   "name": "kronos-service-consul",
-  "version": "0.0.0",
+  "version": "0.0.0-semantic-release",
   "description": "kronos service to integrate with consul",
   "main": "service.js",
   "keywords": [
     "kronos-service"
   ],
   "scripts": {
-    "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests",
+    "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests/*_test.js",
     "test": "mocha tests/*_test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "doc": "jsdoc lib/*.js"
   },
   "contributors": [
     {
@@ -23,11 +24,12 @@
   ],
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "3.5.0",
     "cz-conventional-changelog": "^1.1.5",
     "istanbul": "0.4.2",
-    "mocha": "^2.4.5",
-    "semantic-release": "6.2.0"
+    "mocha": "2.4.5",
+    "semantic-release": "6.2.0",
+    "jsdoc": "3.4.0"
   },
   "dependencies": {
     "consul": "0.23.0",
