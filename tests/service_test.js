@@ -33,7 +33,7 @@ describe('consul service', () => {
           console.log(`${JSON.stringify(cs.tags)}`);
           done();
         }, done);
-      });
+      }).catch(done);
 
     } catch (err) {
       done(err);
