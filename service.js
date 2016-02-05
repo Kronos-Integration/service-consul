@@ -77,38 +77,38 @@ class ServiceConsul extends ServiceKOA {
 	 */
 	_start() {
 		this.info(level => this.serviceDefinition);
-		const self = this;
 
-		return new Promise(function (fullfill, reject) {
+		console.log(`A services: ${Object.keys(this.owner.services)}`);
 
+		return new Promise((fullfill, reject) => {
 			setTimeout(() => {
-				console.log(`services: ${Object.keys(self.owner.services)}`);
+				console.log(`B services: ${Object.keys(this.owner.services)}`);
 
 				// TODO wait until service becomes available
-				ServiceConsumerMixin.defineServiceConsumerProperties(self, {
+				ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 					"hcs": {
 						type: "health-check"
 					}
-				}, self.owner);
+				}, this.owner);
 
-				self.tags = Object.keys(self.owner.steps);
+				this.tags = Object.keys(this.owner.steps);
 
-				consul.agent.service.register(self.serviceDefinition).then(f => {
-					consul.status.leader().then(leader => self.info(level =>
+				consul.agent.service.register(this.serviceDefinition).then(f => {
+					consul.status.leader().then(leader => this.info(level =>
 						`Consul raft leader is ${Object.keys(leader).join(',')}`));
-					consul.status.peers().then(peers => self.info(level => `Consul raft peers are ${peers.map(p => p.body)}`));
-					this.kronosNodes().then(nodes => self.info(level =>
+					consul.status.peers().then(peers => this.info(level => `Consul raft peers are ${peers.map(p => p.body)}`));
+					this.kronosNodes().then(nodes => this.info(level =>
 						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
 
-					self._stepRegisteredListener = step => {
-						self.tags = Object.keys(self.owner.steps);
-						self.update(1000);
+					this._stepRegisteredListener = step => {
+						this.tags = Object.keys(this.owner.steps);
+						this.update(1000);
 					};
 
-					self.owner.addListener('stepRegistered', self._stepRegisteredListener);
+					this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 					fullfill();
 				}, reject);
-			}, 1000);
+			}, 300);
 		});
 	}
 

@@ -11,24 +11,17 @@ const chai = require('chai'),
   ServiceConsul = require('../service.js');
 
 
-describe('consul service', () => {
-  it("create", done => {
-    try {
-      ksm.manager({}, [ServiceConsul, require('kronos-service-health-check')]).then(manager => {
-        const cs = manager.services.consul;
+describe('consul service', () =>
+  it("create", () =>
+    ksm.manager({}, [ServiceConsul, require('kronos-service-health-check')]).then(manager => {
+      const cs = manager.services.consul;
 
-        assert.equal(cs.name, "consul");
-        assert.equal(cs.state, "starting");
+      assert.equal(cs.name, "consul");
 
-        cs.start().then(f => {
-          assert.equal(cs.state, "running");
-          console.log(`${JSON.stringify(cs.tags)}`);
-          done();
-        }, done);
-      }).catch(done);
-
-    } catch (err) {
-      done(err);
-    }
-  });
-});
+      return cs.start().then(f => {
+        assert.equal(cs.state, "running");
+        assert.deepEqual(cs.tags, []);
+      });
+    })
+  )
+);
