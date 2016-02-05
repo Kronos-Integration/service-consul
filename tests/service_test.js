@@ -14,7 +14,7 @@ const chai = require('chai'),
 describe('consul service', () => {
   it("create", done => {
     try {
-      ksm.manager({}, [ServiceConsul]).then(manager => {
+      ksm.manager({}, [ServiceConsul, require('kronos-service-health-check')]).then(manager => {
         const cs = manager.services.consul;
 
         assert.equal(cs.name, "consul");

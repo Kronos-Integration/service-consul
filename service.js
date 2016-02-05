@@ -25,14 +25,6 @@ const consul = require('consul')({
 class ServiceConsul extends ServiceKOA {
 	constructor(config, owner) {
 		super(config, owner);
-
-		/*
-				ServiceConsumerMixin.defineServiceConsumerProperties(this, {
-					"hcs": {
-						type: "kronos-health-check"
-					}
-				}, owner);
-		*/
 		this.hcs = {
 			url: "http://localhost:1234/"
 		};
@@ -85,30 +77,38 @@ class ServiceConsul extends ServiceKOA {
 	 */
 	_start() {
 		this.info(level => this.serviceDefinition);
+		const self = this;
 
-		this.tags = Object.keys(this.owner.steps);
+		return new Promise(function (fullfill, reject) {
 
-		return consul.agent.service.register(this.serviceDefinition).then(f => {
+			setTimeout(() => {
+				console.log(`services: ${Object.keys(self.owner.services)}`);
 
-			consul.status.leader().then(leader => {
-				this.info(level => `Consul raft leader is ${Object.keys(leader).join(',')}`);
-			});
+				// TODO wait until service becomes available
+				ServiceConsumerMixin.defineServiceConsumerProperties(self, {
+					"hcs": {
+						type: "health-check"
+					}
+				}, self.owner);
 
-			consul.status.peers().then(peers => {
-				this.info(level => `Consul raft peers are ${peers.map(p => p.body)}`);
-			});
+				self.tags = Object.keys(self.owner.steps);
 
-			this.kronosNodes().then(nodes => {
-				this.info(level => `Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`);
-			});
+				consul.agent.service.register(self.serviceDefinition).then(f => {
+					consul.status.leader().then(leader => self.info(level =>
+						`Consul raft leader is ${Object.keys(leader).join(',')}`));
+					consul.status.peers().then(peers => self.info(level => `Consul raft peers are ${peers.map(p => p.body)}`));
+					this.kronosNodes().then(nodes => self.info(level =>
+						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
 
-			this._stepRegisteredListener = step => {
-				this.tags = Object.keys(this.owner.steps);
-				this.update(1000);
-			};
+					self._stepRegisteredListener = step => {
+						self.tags = Object.keys(self.owner.steps);
+						self.update(1000);
+					};
 
-			this.owner.addListener('stepRegistered', this._stepRegisteredListener);
-			return Promise.resolve();
+					self.owner.addListener('stepRegistered', self._stepRegisteredListener);
+					fullfill();
+				}, reject);
+			}, 1000);
 		});
 	}
 
