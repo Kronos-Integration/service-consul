@@ -7,23 +7,15 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  service = require('kronos-service'),
+  ksm = require('kronos-service-manager'),
   ServiceConsul = require('../service.js');
 
-class ServiceProvider extends service.ServiceProviderMixin(service.Service) {}
-
-const sp = new ServiceProvider();
 
 describe('consul service', () => {
   it("create", done => {
     try {
-      ServiceConsul.registerWithManager(sp).then(() => {
-        const cs = sp.createServiceFactoryInstanceFromConfig({
-          type: 'consul',
-          port: 1234
-        });
-
-        cs.start();
+      ksm.manager({}, [ServiceConsul]).then(manager => {
+        const cs = manager.services.consul;
 
         assert.equal(cs.name, "consul");
         assert.equal(cs.state, "starting");

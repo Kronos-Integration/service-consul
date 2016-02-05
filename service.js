@@ -19,16 +19,23 @@ const consul = require('consul')({
 			});
 		}
 	}),
-	ServiceKOA = require('kronos-service-koa').Service;
+	ServiceKOA = require('kronos-service-koa').Service,
+	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
 class ServiceConsul extends ServiceKOA {
-	constructor(config) {
-		super(config);
+	constructor(config, owner) {
+		super(config, owner);
 
+		/*
+				ServiceConsumerMixin.defineServiceConsumerProperties(this, {
+					"hcs": {
+						type: "kronos-health-check"
+					}
+				}, owner);
+		*/
 		this.hcs = {
 			url: "http://localhost:1234/"
 		};
-		//const hcs = manager.serviceGet('health-check');
 	}
 
 	static get name() {
@@ -79,7 +86,7 @@ class ServiceConsul extends ServiceKOA {
 	_start() {
 		this.info(level => this.serviceDefinition);
 
-		//this.tags = Object.keys(manager.steps);
+		this.tags = Object.keys(this.owner.steps);
 
 		return consul.agent.service.register(this.serviceDefinition).then(f => {
 
@@ -96,13 +103,11 @@ class ServiceConsul extends ServiceKOA {
 			});
 
 			this._stepRegisteredListener = step => {
-				// TODO where to get the regitered steps from ?
-				//this.tags = Object.keys(manager.steps);
+				this.tags = Object.keys(this.owner.steps);
 				this.update(1000);
 			};
 
-			// TODO
-			//manager.addListener('stepRegistered', this._stepRegisteredListener);
+			this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 			return Promise.resolve();
 		});
 	}
@@ -113,7 +118,7 @@ class ServiceConsul extends ServiceKOA {
 	 */
 	_stop() {
 		return consul.agent.service.deregister().then(f => {
-			manager.removeListener('stepRegistered', this._stepRegisteredListener);
+			this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
 			return Promise.resolve();
 		});
 	}
