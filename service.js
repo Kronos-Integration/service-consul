@@ -23,12 +23,6 @@ const consul = require('consul')({
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
 class ServiceConsul extends ServiceKOA {
-	constructor(config, owner) {
-		super(config, owner);
-		this.hcs = {
-			url: "http://localhost:1234/"
-		};
-	}
 
 	static get name() {
 		return "consul";
@@ -65,7 +59,7 @@ class ServiceConsul extends ServiceKOA {
 	get checkDefinition() {
 		return {
 			"id": `${this.serviceName}-check`,
-			"http": this.hcs.url,
+			"http": this.url,
 			"interval": '10s',
 			"timeout": "1s"
 		};
@@ -76,39 +70,48 @@ class ServiceConsul extends ServiceKOA {
 	 * @return {Promise} that fullfills
 	 */
 	_start() {
-		this.info(level => this.serviceDefinition);
+		return super._start().then(() => {
+			this.info(level => this.serviceDefinition);
 
-		console.log(`A services: ${Object.keys(this.owner.services)}`);
+			this.tags = Object.keys(this.owner.steps);
 
-		return new Promise((fullfill, reject) => {
-			setTimeout(() => {
-				console.log(`B services: ${Object.keys(this.owner.services)}`);
+			this.koa.use(ctx =>
+				this.hcs.endpoints.state.receive({}).then(r => {
+					this.info({
+						'health': r
+					});
+					this.status = r ? 200 : 300;
+					ctx.body = r ? 'OK' : 'ERROR';
+				})
+			);
 
-				// TODO wait until service becomes available
-				ServiceConsumerMixin.defineServiceConsumerProperties(this, {
-					"hcs": {
-						type: "health-check"
-					}
-				}, this.owner);
+			return new Promise((fullfill, reject) => {
+				setTimeout(() => {
+					// TODO wait until service becomes available
+					ServiceConsumerMixin.defineServiceConsumerProperties(this, {
+						"hcs": {
+							type: "health-check"
+						}
+					}, this.owner).then(() =>
+						consul.agent.service.register(this.serviceDefinition).then(f => {
+							consul.status.leader().then(leader => this.info(level =>
+								`Consul raft leader is ${Object.keys(leader).join(',')}`));
+							consul.status.peers().then(peers => this.info(level =>
+								`Consul raft peers are ${peers.map(p => p.body)}`));
+							this.kronosNodes().then(nodes => this.info(level =>
+								`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
 
-				this.tags = Object.keys(this.owner.steps);
+							this._stepRegisteredListener = step => {
+								this.tags = Object.keys(this.owner.steps);
+								this.update(1000);
+							};
 
-				consul.agent.service.register(this.serviceDefinition).then(f => {
-					consul.status.leader().then(leader => this.info(level =>
-						`Consul raft leader is ${Object.keys(leader).join(',')}`));
-					consul.status.peers().then(peers => this.info(level => `Consul raft peers are ${peers.map(p => p.body)}`));
-					this.kronosNodes().then(nodes => this.info(level =>
-						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
-
-					this._stepRegisteredListener = step => {
-						this.tags = Object.keys(this.owner.steps);
-						this.update(1000);
-					};
-
-					this.owner.addListener('stepRegistered', this._stepRegisteredListener);
-					fullfill();
-				}, reject);
-			}, 300);
+							this.owner.addListener('stepRegistered', this._stepRegisteredListener);
+							fullfill();
+						}, reject)
+					).catch(console.log);
+				}, 300);
+			});
 		});
 	}
 

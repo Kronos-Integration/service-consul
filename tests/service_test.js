@@ -11,7 +11,8 @@ const chai = require('chai'),
   ServiceConsul = require('../service.js');
 
 
-describe('consul service', () =>
+describe('consul service', function () {
+  this.timeout(30000);
   it("create", () =>
     ksm.manager({}, [ServiceConsul, require('kronos-service-health-check')]).then(manager => {
       const cs = manager.services.consul;
@@ -21,7 +22,10 @@ describe('consul service', () =>
       return cs.start().then(f => {
         assert.equal(cs.state, "running");
         assert.deepEqual(cs.tags, []);
+
+        return new Promise((f, r) =>
+          setTimeout(f, 20000));
       });
     })
   )
-);
+});
