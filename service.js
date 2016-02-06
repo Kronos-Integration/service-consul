@@ -79,6 +79,9 @@ class ServiceConsul extends ServiceKOA {
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 				"hcs": {
 					type: "health-check"
+				},
+				"registry": {
+					type: "registry"
 				}
 			}, this.owner, true).then(() =>
 				consul.agent.service.register(this.serviceDefinition).then(f => {
@@ -88,6 +91,8 @@ class ServiceConsul extends ServiceKOA {
 						`Consul raft peers are ${peers.map(p => p.body)}`));
 					this.kronosNodes().then(nodes => this.info(level =>
 						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
+
+					this.info(`using registry: ${this.registry.name}`);
 
 					this._stepRegisteredListener = step => {
 						this.tags = Object.keys(this.owner.steps);

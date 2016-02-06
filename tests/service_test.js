@@ -14,18 +14,19 @@ const chai = require('chai'),
 describe('consul service', function () {
   this.timeout(30000);
   it("create", () =>
-    ksm.manager({}, [ServiceConsul, require('kronos-service-health-check')]).then(manager => {
-      const cs = manager.services.consul;
+    ksm.manager({}, [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-registry')]).then(
+      manager => {
+        const cs = manager.services.consul;
 
-      assert.equal(cs.name, "consul");
+        assert.equal(cs.name, "consul");
 
-      return cs.start().then(f => {
-        assert.equal(cs.state, "running");
-        assert.deepEqual(cs.tags, []);
+        return cs.start().then(f => {
+          assert.equal(cs.state, "running");
+          assert.deepEqual(cs.tags, []);
 
-        return new Promise((f, r) =>
-          setTimeout(f, 20000));
-      });
-    })
+          return new Promise((f, r) =>
+            setTimeout(f, 20000));
+        });
+      })
   )
 });
