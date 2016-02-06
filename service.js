@@ -149,12 +149,6 @@ class ServiceConsul extends ServiceKOA {
 	datacenters() {
 		return consul.catalog.datacenters();
 	}
-
-	markCheckAsPassed() {
-		consul.agent.check.pass(this.checkDefinition.id, error =>
-			this.trace(level => `Check marked as passed: ${service} ${error}`)
-		);
-	}
 }
 
 module.exports.registerWithManager = manager =>
