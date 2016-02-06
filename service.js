@@ -75,43 +75,40 @@ class ServiceConsul extends ServiceKOA {
 
 			this.tags = Object.keys(this.owner.steps);
 
-			this.koa.use(ctx =>
-				this.hcs.endpoints.state.receive({}).then(r => {
-					this.info({
-						'health': r
-					});
-					this.status = r ? 200 : 300;
-					ctx.body = r ? 'OK' : 'ERROR';
+			// wait until health-check service if present
+			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
+				"hcs": {
+					type: "health-check"
+				}
+			}, this.owner, true).then(() =>
+				consul.agent.service.register(this.serviceDefinition).then(f => {
+					consul.status.leader().then(leader => this.info(level =>
+						`Consul raft leader is ${Object.keys(leader).join(',')}`));
+					consul.status.peers().then(peers => this.info(level =>
+						`Consul raft peers are ${peers.map(p => p.body)}`));
+					this.kronosNodes().then(nodes => this.info(level =>
+						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
+
+					this._stepRegisteredListener = step => {
+						this.tags = Object.keys(this.owner.steps);
+						this.update(1000);
+					};
+
+					this.owner.addListener('stepRegistered', this._stepRegisteredListener);
+
+					this.koa.use(ctx =>
+						this.hcs.endpoints.state.receive({}).then(r => {
+							this.info({
+								'health': r
+							});
+							this.status = r ? 200 : 300;
+							ctx.body = r ? 'OK' : 'ERROR';
+						})
+					);
+
+					return Promise.resolve();
 				})
 			);
-
-			return new Promise((fullfill, reject) => {
-				setTimeout(() => {
-					// TODO wait until service becomes available
-					ServiceConsumerMixin.defineServiceConsumerProperties(this, {
-						"hcs": {
-							type: "health-check"
-						}
-					}, this.owner).then(() =>
-						consul.agent.service.register(this.serviceDefinition).then(f => {
-							consul.status.leader().then(leader => this.info(level =>
-								`Consul raft leader is ${Object.keys(leader).join(',')}`));
-							consul.status.peers().then(peers => this.info(level =>
-								`Consul raft peers are ${peers.map(p => p.body)}`));
-							this.kronosNodes().then(nodes => this.info(level =>
-								`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
-
-							this._stepRegisteredListener = step => {
-								this.tags = Object.keys(this.owner.steps);
-								this.update(1000);
-							};
-
-							this.owner.addListener('stepRegistered', this._stepRegisteredListener);
-							fullfill();
-						}, reject)
-					).catch(console.log);
-				}, 300);
-			});
 		});
 	}
 
