@@ -19,10 +19,12 @@ const consul = require('consul')({
 			});
 		}
 	}),
-	ServiceKOA = require('kronos-service-koa').Service,
+	path = require('path'),
+	route = require('koa-route'),
+	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
-class ServiceConsul extends ServiceKOA {
+class ServiceConsul extends service.Service {
 
 	static get name() {
 		return "consul";
@@ -42,33 +44,29 @@ class ServiceConsul extends ServiceKOA {
 		Object.defineProperty(this, 'consul', {
 			value: consul
 		});
-	}
 
-	get serviceId() {
-		return this.serviceName;
-	}
+		Object.defineProperty(this, 'checkPath', {
+			value: config.checkPath || '/check'
+		});
 
-	get serviceName() {
-		return "kronos";
+		Object.defineProperty(this, 'checkInterval', {
+			value: config.checkInterval || '10s'
+		});
+
 	}
 
 	get serviceDefinition() {
 		return {
-			name: this.serviceName,
-			serviceid: this.serviceId,
-			check: this.checkDefinition,
-			port: this.port,
+			port: this.listener.port,
 			tags: this.tags,
-			notes: this.notes
-		};
-	}
-
-	get checkDefinition() {
-		return {
-			"id": `${this.serviceName}-check`,
-			"http": this.url,
-			"interval": '10s',
-			"timeout": "1s"
+			name: "kronos",
+			serviceid: this.listener.url,
+			check: {
+				"id": this.listener.url + this.checkPath,
+				"http": this.listener.url + this.checkPath,
+				"interval": this.checkInterval,
+				"timeout": "1s"
+			}
 		};
 	}
 
@@ -78,51 +76,50 @@ class ServiceConsul extends ServiceKOA {
 	 */
 	_start() {
 		return super._start().then(() => {
-			this.info(level => this.serviceDefinition);
+			//this.info(level => this.serviceDefinition);
 
 			this.tags = Object.keys(this.owner.steps);
 
 			// wait until health-check service if present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
+				"listener": {
+					name: "admin",
+					type: "koa"
+				},
 				"hcs": {
 					type: "health-check"
 				}
 			}, this.owner, true).then(() =>
-				consul.agent.service.register(this.serviceDefinition).then(f => {
-					consul.status.leader().then(leader => this.info(level =>
-						`Consul raft leader is ${Object.keys(leader).join(',')}`));
-					consul.status.peers().then(peers => this.info(level =>
-						`Consul raft peers are ${peers.map(p => p.body)}`));
-					this.kronosNodes().then(nodes => this.info(level =>
-						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
+				this.listener.start().then(() =>
+					consul.agent.service.register(this.serviceDefinition).then(f => {
+						consul.status.leader().then(leader => this.info(level =>
+							`Consul raft leader is ${Object.keys(leader).join(',')}`));
+						consul.status.peers().then(peers => this.info(level =>
+							`Consul raft peers are ${peers.map(p => p.body)}`));
+						this.kronosNodes().then(nodes => this.info(level =>
+							`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
 
-					// TODO: fake registry servie
-					this.owner.registerServiceAs(this, 'registry').then(r => {
-						console.log(`CONSUL  : ${this.owner.services.consul} ${this.owner.services.consul.type}`);
-						console.log(`REGISTRY: ${this.owner.services.registry} ${this.owner.services.registry.type}`);
-					});
+						this._stepRegisteredListener = step => {
+							this.tags = Object.keys(this.owner.steps);
+							this.update(1000);
+						};
 
-					this._stepRegisteredListener = step => {
-						this.tags = Object.keys(this.owner.steps);
-						this.update(1000);
-					};
+						this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 
-					this.owner.addListener('stepRegistered', this._stepRegisteredListener);
+						this.listener.koa.use(route.get(this.checkPath, ctx =>
+							this.hcs.endpoints.state.receive({}).then(r => {
+								this.info({
+									'health': r
+								});
+								this.status = r ? 200 : 300;
+								ctx.body = r ? 'OK' : 'ERROR';
+							})
+						));
 
-					this.koa.use(ctx =>
-						this.hcs.endpoints.state.receive({}).then(r => {
-							this.info({
-								'health': r
-							});
-							this.status = r ? 200 : 300;
-							ctx.body = r ? 'OK' : 'ERROR';
-						})
-					);
-
-					return Promise.resolve();
-				})
+						return Promise.resolve();
+					})
+				)
 			);
-
 		});
 	}
 
@@ -183,6 +180,5 @@ module.exports.registerWithManager = manager =>
 	manager.registerServiceFactory(ServiceConsul).then(sf =>
 		manager.declareService({
 			'type': sf.name,
-			'name': sf.name,
-			'port': 4712
+			'name': 'registry'
 		}));

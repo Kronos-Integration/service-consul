@@ -17,22 +17,19 @@ describe('consul service', function () {
     ksm.manager([{}, {
       name: "consul",
       port: 4713
-    }], [ServiceConsul, require('kronos-service-health-check')]).then(
+    }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
-        const cs = manager.services.consul;
+        const cs = manager.services.registry;
 
-        console.log(`${cs}`);
-        assert.equal(cs.name, "consul");
+        assert.equal(cs.name, "registry");
 
         return cs.start().then(f => {
           assert.equal(cs.state, "running");
           assert.deepEqual(cs.tags, []);
 
-          /*
-                    cs.registerService('maService', {
-                      url: cs.url + "/somepath"
-                    });
-          */
+          cs.registerService('maService', {
+            url: cs.listener.url + "/somepath"
+          });
           cs.consul.kv.set('hello', 'world').then(f => {
             //console.log(`SET ${f}`);
 
@@ -46,5 +43,5 @@ describe('consul service', function () {
             setTimeout(f, 20000));
         });
       })
-  )
+  );
 });
