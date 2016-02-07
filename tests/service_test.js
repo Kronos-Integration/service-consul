@@ -17,16 +17,22 @@ describe('consul service', function () {
     ksm.manager([{}, {
       name: "consul",
       port: 4713
-    }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-registry')]).then(
+    }], [ServiceConsul, require('kronos-service-health-check')]).then(
       manager => {
         const cs = manager.services.consul;
 
+        console.log(`${cs}`);
         assert.equal(cs.name, "consul");
 
         return cs.start().then(f => {
           assert.equal(cs.state, "running");
           assert.deepEqual(cs.tags, []);
 
+          /*
+                    cs.registerService('maService', {
+                      url: cs.url + "/somepath"
+                    });
+          */
           cs.consul.kv.set('hello', 'world').then(f => {
             //console.log(`SET ${f}`);
 

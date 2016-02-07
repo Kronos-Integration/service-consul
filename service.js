@@ -86,9 +86,6 @@ class ServiceConsul extends ServiceKOA {
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 				"hcs": {
 					type: "health-check"
-				},
-				"registry": {
-					type: "registry"
 				}
 			}, this.owner, true).then(() =>
 				consul.agent.service.register(this.serviceDefinition).then(f => {
@@ -99,7 +96,11 @@ class ServiceConsul extends ServiceKOA {
 					this.kronosNodes().then(nodes => this.info(level =>
 						`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
 
-					this.info(`using registry: ${this.registry.name}`);
+					// TODO: fake registry servie
+					this.owner.registerServiceAs(this, 'registry').then(r => {
+						console.log(`CONSUL  : ${this.owner.services.consul} ${this.owner.services.consul.type}`);
+						console.log(`REGISTRY: ${this.owner.services.registry} ${this.owner.services.registry.type}`);
+					});
 
 					this._stepRegisteredListener = step => {
 						this.tags = Object.keys(this.owner.steps);
@@ -121,6 +122,7 @@ class ServiceConsul extends ServiceKOA {
 					return Promise.resolve();
 				})
 			);
+
 		});
 	}
 
@@ -153,13 +155,27 @@ class ServiceConsul extends ServiceKOA {
 
 	kronosNodes() {
 		return consul.catalog.service.nodes({
-			//dc: this.dataCenter,
 			service: this.name
 		});
 	}
 
-	datacenters() {
-		return consul.catalog.datacenters();
+	registerService(name, options) {
+		this.info({
+			message: 'registerService',
+			name: name,
+			options: options
+		});
+
+		const serviceDefinition = {
+			name: name,
+			serviceid: options.url,
+			tags: options.tags
+		};
+
+		return consul.agent.service.register(serviceDefinition).then(f => {
+			//this.info(`registered: ${JSON.stringify(f)}`);
+			return Promise.resolve();
+		});
 	}
 }
 
