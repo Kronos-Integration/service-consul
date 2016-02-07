@@ -60,7 +60,7 @@ class ServiceConsul extends service.Service {
 			port: this.listener.port,
 			tags: this.tags,
 			name: "kronos",
-			serviceid: this.listener.url,
+			id: this.listener.url,
 			check: {
 				"id": this.listener.url + this.checkPath,
 				"http": this.listener.url + this.checkPath,
@@ -80,7 +80,7 @@ class ServiceConsul extends service.Service {
 
 			this.tags = Object.keys(this.owner.steps);
 
-			// wait until health-check service if present
+			// wait until health-check and koa services are present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 				"listener": {
 					name: "admin",
@@ -97,7 +97,12 @@ class ServiceConsul extends service.Service {
 						consul.status.peers().then(peers => this.info(level =>
 							`Consul raft peers are ${peers.map(p => p.body)}`));
 						this.kronosNodes().then(nodes => this.info(level =>
-							`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`));
+							`Kronos nodes are ${nodes[0].map( n => n.ServiceID)}`)).catch(console.log);
+
+						/*
+												this.kronosNodes().then(nodes => this.info(level =>
+													`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`)).catch(console.log);
+						*/
 
 						this._stepRegisteredListener = step => {
 							this.tags = Object.keys(this.owner.steps);
@@ -152,7 +157,7 @@ class ServiceConsul extends service.Service {
 
 	kronosNodes() {
 		return consul.catalog.service.nodes({
-			service: this.name
+			service: this.serviceDefinition.name
 		});
 	}
 
