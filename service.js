@@ -19,7 +19,6 @@ const consul = require('consul')({
 			});
 		}
 	}),
-	path = require('path'),
 	route = require('koa-route'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
