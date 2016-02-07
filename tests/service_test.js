@@ -14,7 +14,10 @@ const chai = require('chai'),
 describe('consul service', function () {
   this.timeout(30000);
   it("create", () =>
-    ksm.manager({}, [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-registry')]).then(
+    ksm.manager([{}, {
+      name: "consul",
+      port: 4713
+    }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-registry')]).then(
       manager => {
         const cs = manager.services.consul;
 
