@@ -24,6 +24,15 @@ describe('consul service', function () {
           assert.equal(cs.state, "running");
           assert.deepEqual(cs.tags, []);
 
+          cs.consul.kv.set('hello', 'world').then(f => {
+            //console.log(`SET ${f}`);
+
+            return cs.consul.kv.get('hello').then(f => {
+              //console.log(f);
+              console.log(`GET ${f[0].Key} = ${f[0].Value}`);
+            });
+          }).catch(console.log);
+
           return new Promise((f, r) =>
             setTimeout(f, 20000));
         });

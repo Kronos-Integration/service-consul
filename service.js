@@ -36,6 +36,14 @@ class ServiceConsul extends ServiceKOA {
 		return true;
 	}
 
+	constructor(config, owner) {
+		super(config, owner);
+
+		Object.defineProperty(this, 'consul', {
+			value: consul
+		});
+	}
+
 	get serviceId() {
 		return this.serviceName;
 	}
@@ -48,7 +56,6 @@ class ServiceConsul extends ServiceKOA {
 		return {
 			name: this.serviceName,
 			serviceid: this.serviceId,
-			ttl: this.ttl,
 			check: this.checkDefinition,
 			port: this.port,
 			tags: this.tags,
