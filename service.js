@@ -142,10 +142,10 @@ class ServiceConsul extends service.Service {
 	 * @param {Number} delay time to wait before doing the unregister/register action
 	 */
 	update(delay) {
-		function reregister() {
+		const reregister = () => {
 			return consul.agent.service.deregister(this.consulDefinition.id)
 				.then(() => consul.agent.service.register(this.consulDefinition));
-		}
+		};
 
 		if (delay) {
 			if (this._updateTimer) {

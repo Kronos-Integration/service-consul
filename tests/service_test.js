@@ -29,7 +29,10 @@ describe('consul service', function () {
 
           cs.registerService('maService', {
             url: cs.listener.url + "/somepath"
-          });
+          }).then(() => cs.unregisterService('myService').then(() => {
+            assert.ok("unregistered");
+          })).catch(console.log);
+
           cs.consul.kv.set('hello', 'world').then(f => {
             //console.log(`SET ${f}`);
 
