@@ -51,7 +51,6 @@ class ServiceConsul extends service.Service {
 		Object.defineProperty(this, 'checkInterval', {
 			value: config.checkInterval || '10s'
 		});
-
 	}
 
 	get serviceDefinition() {
@@ -143,14 +142,18 @@ class ServiceConsul extends service.Service {
 	 * @param {Number} delay time to wait before doing the unregister/register action
 	 */
 	update(delay) {
+		function reregister() {
+			return consul.agent.service.deregister(this.consulDefinition.id)
+				.then(() => consul.agent.service.register(this.consulDefinition));
+		}
+
 		if (delay) {
 			if (this._updateTimer) {
 				clearTimeout(this._updateTimer);
 			}
-			this._updateTimer = setTimeout(() =>
-				consul.agent.service.deregister().then(consul.agent.service.register(this.consulDefinition())), delay);
+			this._updateTimer = setTimeout(reregister, delay);
 		} else {
-			return consul.agent.service.deregister().then(consul.agent.service.register(this.consulDefinition()));
+			return reregister();
 		}
 	}
 
@@ -177,6 +180,15 @@ class ServiceConsul extends service.Service {
 			//this.info(`registered: ${JSON.stringify(f)}`);
 			return Promise.resolve();
 		});
+	}
+
+	unregisterService(name) {
+		this.info({
+			message: 'unregisterService',
+			name: name
+		});
+
+		return consul.agent.service.deregister(name);
 	}
 }
 
