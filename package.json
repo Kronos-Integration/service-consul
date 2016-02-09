@@ -37,7 +37,7 @@
   "dependencies": {
     "consul": "0.23.0",
     "koa-route": "^3.0.0",
-    "kronos-service": "^2.8.1"
+    "kronos-service": "^2.8.2"
   },
   "repository": {
     "type": "git",
