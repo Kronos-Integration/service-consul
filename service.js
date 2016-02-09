@@ -190,6 +190,31 @@ class ServiceConsul extends service.Service {
 
 		return consul.agent.service.deregister(name);
 	}
+
+	* serviceURLs(name) {
+		let si = [];
+
+		yield consul.catalog.service.nodes({
+			service: name
+		}).then(nodes => {
+			si = nodes[0].map(n => n.ServiceID);
+
+			return Promise.resolve(si[0]);
+		});
+
+		console.log(`size: ${si.length}`);
+
+		for (let i = 1;; i++) {
+			if (i >= si.length) {
+				i = 0;
+			}
+			console.log(`yield: ${i}`);
+			yield Promise.resolve(si[i]);
+		}
+
+		return undefined;
+	}
+
 }
 
 module.exports.registerWithManager = manager =>

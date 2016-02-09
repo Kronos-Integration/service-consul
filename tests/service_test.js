@@ -27,17 +27,25 @@ describe('consul service', function () {
           assert.equal(cs.state, "running");
           assert.deepEqual(cs.tags, []);
 
-          cs.registerService('maService', {
+          cs.registerService('myService', {
             url: cs.listener.url + "/somepath"
-          }).then(() => cs.unregisterService('myService').then(() => {
-            assert.ok("unregistered");
-          })).catch(console.log);
+          }).then(() => {
+            for (let up of cs.serviceURLs('myService')) {
+              up.then(u => {
+                console.log(`Service: ${u}`);
+              }).catch(console.log);
+              break;
+            }
+            setTimeout(() => {
+                cs.unregisterService('myService').then(() => {
+                  assert.ok("unregistered");
+                });
+              },
+              5000);
+          }).catch(console.log);
 
           cs.consul.kv.set('hello', 'world').then(f => {
-            //console.log(`SET ${f}`);
-
             return cs.consul.kv.get('hello').then(f => {
-              //console.log(f);
               console.log(`GET ${f[0].Key} = ${f[0].Value}`);
             });
           }).catch(console.log);
