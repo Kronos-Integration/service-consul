@@ -30,11 +30,12 @@ describe('consul service', function () {
           cs.registerService('myService', {
             url: cs.listener.url + "/somepath"
           }).then(() => {
-            for (const up of cs.serviceURLs('myService')) {
-              up.then(u => {
-                console.log(`Service: ${u}`);
-              }).catch(console.log);
-            }
+            const us = cs.serviceURLs('myService');
+
+            setInterval(() =>
+              us.next().value.then(u => console.log(`myService: ${u}`)),
+              500);
+
             setTimeout(() => {
                 cs.unregisterService('myService').then(() => {
                   assert.ok("unregistered");

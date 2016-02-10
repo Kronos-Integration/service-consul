@@ -172,7 +172,7 @@ class ServiceConsul extends service.Service {
 
 		const serviceDefinition = {
 			name: name,
-			serviceid: options.url,
+			id: options.url,
 			tags: options.tags
 		};
 
@@ -194,22 +194,28 @@ class ServiceConsul extends service.Service {
 	* serviceURLs(name) {
 		let si = [];
 
-		yield consul.catalog.service.nodes({
+		let firstPromise = consul.catalog.service.nodes({
 			service: name
 		}).then(nodes => {
 			si = nodes[0].map(n => n.ServiceID);
+			//	console.log(`AAA size: ${si.length} ${si[0]}`);
+
+			firstPromise = undefined;
 
 			return Promise.resolve(si[0]);
 		});
 
-		console.log(`size: ${si.length}`);
+		while (firstPromise) {
+			yield firstPromise;
+			//console.log(`size: ${si.length} ${firstPromise}`);
+		}
 
 		if (si.length) {
 			for (let i = 1;; i++) {
 				if (i >= si.length) {
 					i = 0;
 				}
-				console.log(`yield: ${i} ${si.length}`);
+				//console.log(`yield: ${i} ${si.length}`);
 				yield Promise.resolve(si[i]);
 			}
 		}
