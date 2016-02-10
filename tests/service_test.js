@@ -30,11 +30,10 @@ describe('consul service', function () {
           cs.registerService('myService', {
             url: cs.listener.url + "/somepath"
           }).then(() => {
-            for (let up of cs.serviceURLs('myService')) {
+            for (const up of cs.serviceURLs('myService')) {
               up.then(u => {
                 console.log(`Service: ${u}`);
               }).catch(console.log);
-              break;
             }
             setTimeout(() => {
                 cs.unregisterService('myService').then(() => {

@@ -204,14 +204,15 @@ class ServiceConsul extends service.Service {
 
 		console.log(`size: ${si.length}`);
 
-		for (let i = 1;; i++) {
-			if (i >= si.length) {
-				i = 0;
+		if (si.length) {
+			for (let i = 1;; i++) {
+				if (i >= si.length) {
+					i = 0;
+				}
+				console.log(`yield: ${i} ${si.length}`);
+				yield Promise.resolve(si[i]);
 			}
-			console.log(`yield: ${i}`);
-			yield Promise.resolve(si[i]);
 		}
-
 		return undefined;
 	}
 
