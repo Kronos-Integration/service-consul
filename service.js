@@ -19,6 +19,7 @@ const consul = require('consul')({
 			});
 		}
 	}),
+	url = require('url'),
 	route = require('koa-route'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
@@ -55,11 +56,11 @@ class ServiceConsul extends service.Service {
 
 	get serviceDefinition() {
 		return {
+			name: "kronos",
+			id: this.listener.url,
 			port: this.listener.port,
 			address: this.listener.hostname,
 			tags: this.tags,
-			name: "kronos",
-			id: this.listener.url,
 			check: {
 				"id": this.listener.url + this.checkPath,
 				"http": this.listener.url + this.checkPath,
@@ -71,12 +72,10 @@ class ServiceConsul extends service.Service {
 
 	/**
 	 * Register the service in consul
-	 * @return {Promise} that fullfills
+	 * @return {Promise} that fullfills on succesfull startup
 	 */
 	_start() {
 		return super._start().then(() => {
-			//this.info(level => this.serviceDefinition);
-
 			this.tags = Object.keys(this.owner.steps);
 
 			// wait until health-check and koa services are present
@@ -105,7 +104,7 @@ class ServiceConsul extends service.Service {
 
 						this._stepRegisteredListener = step => {
 							this.tags = Object.keys(this.owner.steps);
-							this.update(1000);
+							this.update(5000);
 						};
 
 						this.owner.addListener('stepRegistered', this._stepRegisteredListener);
@@ -143,15 +142,15 @@ class ServiceConsul extends service.Service {
 	 * @param {Number} delay time to wait before doing the unregister/register action
 	 */
 	update(delay) {
-		const reregister = () => {
-			return consul.agent.service.deregister(this.consulDefinition.id)
-				.then(() => consul.agent.service.register(this.consulDefinition));
-		};
+		const reregister = () =>
+			consul.agent.service.deregister(this.consulDefinition.id)
+			.then(() => consul.agent.service.register(this.consulDefinition));
+
+		if (this._updateTimer) {
+			clearTimeout(this._updateTimer);
+		}
 
 		if (delay) {
-			if (this._updateTimer) {
-				clearTimeout(this._updateTimer);
-			}
 			this._updateTimer = setTimeout(reregister, delay);
 		} else {
 			return reregister();
@@ -171,9 +170,13 @@ class ServiceConsul extends service.Service {
 			options: options
 		});
 
+		const u = url.parse(options.url);
+
 		const serviceDefinition = {
 			name: name,
-			id: options.url,
+			id: u.href,
+			address: u.hostname,
+			port: u.port,
 			tags: options.tags
 		};
 
