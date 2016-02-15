@@ -176,7 +176,7 @@ class ServiceConsul extends service.Service {
 			name: name,
 			id: u.href,
 			address: u.hostname,
-			port: u.port,
+			port: parseInt(u.port, 10),
 			tags: options.tags
 		};
 
