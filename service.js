@@ -216,20 +216,12 @@ class ServiceConsul extends service.Service {
 	* serviceURLs(name) {
 		let si = [];
 
-		/*
-				let firstPromise = consul.catalog.service.nodes({
-					service: name
-				})
-		*/
-
 		let firstPromise = consul.kv.get({
 				key: `services/${name}`,
 				recurse: true
 			})
 			.then(data => {
-				console.log(data);
-				//si = nodes[0].map(n => n.ServiceID);
-				//	console.log(`AAA size: ${si.length} ${si[0]}`);
+				si = data.map(d => d.Value);
 
 				firstPromise = undefined;
 
@@ -252,7 +244,6 @@ class ServiceConsul extends service.Service {
 		}
 		return undefined;
 	}
-
 }
 
 module.exports.registerWithManager = manager =>

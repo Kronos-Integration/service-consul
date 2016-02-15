@@ -44,11 +44,13 @@ describe('consul service', function () {
               5000);
           }).catch(console.log);
 
-          cs.consul.kv.set('hello', 'world').then(f => {
-            return cs.consul.kv.get('hello').then(f => {
-              console.log(`GET ${f[0].Key} = ${f[0].Value}`);
-            });
-          }).catch(console.log);
+          /*
+                    cs.consul.kv.set('hello', 'world').then(f => {
+                      return cs.consul.kv.get('hello').then(f => {
+                        console.log(`GET ${f[0].Key} = ${f[0].Value}`);
+                      });
+                    }).catch(console.log);
+          */
 
           return new Promise((f, r) =>
             setTimeout(f, 20000));
