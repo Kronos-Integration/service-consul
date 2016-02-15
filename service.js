@@ -19,6 +19,7 @@ const consul = require('consul')({
 			});
 		}
 	}),
+	uuid = require('node-uuid'),
 	url = require('url'),
 	route = require('koa-route'),
 	service = require('kronos-service'),
@@ -40,6 +41,10 @@ class ServiceConsul extends service.Service {
 
 	constructor(config, owner) {
 		super(config, owner);
+
+		Object.defineProperty(this, 'id', {
+			value: uuid.v4()
+		});
 
 		Object.defineProperty(this, 'consul', {
 			value: consul
@@ -95,7 +100,7 @@ class ServiceConsul extends service.Service {
 						consul.status.peers().then(peers => this.info(level =>
 							`Consul raft peers are ${peers.map(p => p.body)}`));
 						this.kronosNodes().then(nodes => this.info(level =>
-							`Kronos nodes are ${nodes[0].map( n => n.ServiceID)}`)).catch(console.log);
+							`Kronos nodes are ${nodes[0].map( n => n.ServiceID)}`));
 
 						/*
 												this.kronosNodes().then(nodes => this.info(level =>
@@ -172,18 +177,26 @@ class ServiceConsul extends service.Service {
 
 		const u = url.parse(options.url);
 
-		const serviceDefinition = {
-			name: name,
-			id: u.href,
-			address: u.hostname,
-			port: parseInt(u.port, 10),
-			tags: options.tags
-		};
-
-		return consul.agent.service.register(serviceDefinition).then(f => {
-			//this.info(`registered: ${JSON.stringify(f)}`);
-			return Promise.resolve();
+		return consul.kv.set({
+			key: `services/${name}/${this.id}/url`,
+			value: options.url
 		});
+
+		/*
+				const serviceDefinition = {
+					name: name,
+					id: u.href,
+					address: u.hostname,
+					port: parseInt(u.port, 10),
+					tags: options.tags
+				};
+
+
+				return consul.agent.service.register(serviceDefinition).then(f => {
+					//this.info(`registered: ${JSON.stringify(f)}`);
+					return Promise.resolve();
+				});
+				*/
 	}
 
 	unregisterService(name) {
@@ -192,22 +205,36 @@ class ServiceConsul extends service.Service {
 			name: name
 		});
 
-		return consul.agent.service.deregister(name);
+		return consul.kv.del({
+			key: `services/${name}/${this.id}`,
+			recurse: true
+		});
+
+		//return consul.agent.service.deregister(name);
 	}
 
 	* serviceURLs(name) {
 		let si = [];
 
-		let firstPromise = consul.catalog.service.nodes({
-			service: name
-		}).then(nodes => {
-			si = nodes[0].map(n => n.ServiceID);
-			//	console.log(`AAA size: ${si.length} ${si[0]}`);
+		/*
+				let firstPromise = consul.catalog.service.nodes({
+					service: name
+				})
+		*/
 
-			firstPromise = undefined;
+		let firstPromise = consul.kv.get({
+				key: `services/${name}`,
+				recurse: true
+			})
+			.then(data => {
+				console.log(data);
+				//si = nodes[0].map(n => n.ServiceID);
+				//	console.log(`AAA size: ${si.length} ${si[0]}`);
 
-			return Promise.resolve(si[0]);
-		});
+				firstPromise = undefined;
+
+				return Promise.resolve(si[0]);
+			});
 
 		while (firstPromise) {
 			yield firstPromise;
