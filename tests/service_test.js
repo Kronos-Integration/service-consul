@@ -32,7 +32,7 @@ describe('consul service', function () {
           }).then(() => {
             const us = cs.serviceURLs('myService');
 
-            assert.equal(us, cs.listener.url + "/somepath");
+            us.next().value.then(u => assert.equal(u, cs.listener.url + "/somepath"));
 
             setInterval(() =>
               us.next().value.then(u => {
