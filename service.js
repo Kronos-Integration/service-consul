@@ -222,10 +222,8 @@ class ServiceConsul extends service.Service {
 			})
 			.then(data => {
 				si = data[0].map(d => d.Value);
-
 				firstPromise = undefined;
-
-				return Promise.resolve(si[0]);
+				return si.length === 0 ? Promise.reject() : Promise.resolve(si[0]);
 			});
 
 		while (firstPromise) {
