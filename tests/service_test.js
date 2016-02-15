@@ -32,25 +32,25 @@ describe('consul service', function () {
           }).then(() => {
             const us = cs.serviceURLs('myService');
 
+            assert.equal(us, cs.listener.url + "/somepath");
+
             setInterval(() =>
-              us.next().value.then(u => console.log(`myService: ${u}`)),
-              500);
+              us.next().value.then(u => {
+                assert.equal(us, cs.listener.url + "/somepath");
+                console.log(`myService: ${u}`);
+              }),
+              1000);
 
             setTimeout(() => {
                 cs.unregisterService('myService').then(() => {
                   assert.ok("unregistered");
+
+                  const us = cs.serviceURLs('myService');
+                  console.log(`after: ${us}`);
                 });
               },
               5000);
           }).catch(console.log);
-
-          /*
-                    cs.consul.kv.set('hello', 'world').then(f => {
-                      return cs.consul.kv.get('hello').then(f => {
-                        console.log(`GET ${f[0].Key} = ${f[0].Value}`);
-                      });
-                    }).catch(console.log);
-          */
 
           return new Promise((f, r) =>
             setTimeout(f, 20000));
