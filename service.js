@@ -221,7 +221,7 @@ class ServiceConsul extends service.Service {
 				recurse: true
 			})
 			.then(data => {
-				si = data.map(d => d.Value);
+				si = data[0].map(d => d.Value);
 
 				firstPromise = undefined;
 
