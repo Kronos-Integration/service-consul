@@ -46,7 +46,7 @@ describe('consul service', function () {
                   assert.ok("unregistered");
 
                   const us = cs.serviceURLs('myService');
-                  console.log(`after: ${us}`);
+                  console.log(`after: ${JSON.stringify(us.next())}`);
                 });
               },
               5000);
