@@ -36,7 +36,7 @@ describe('consul service', function () {
 
             setInterval(() =>
               us.next().value.then(u => {
-                assert.equal(us, cs.listener.url + "/somepath");
+                assert.equal(u, cs.listener.url + "/somepath");
                 console.log(`myService: ${u}`);
               }),
               1000);
