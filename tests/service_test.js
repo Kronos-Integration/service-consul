@@ -53,7 +53,7 @@ describe('consul service', function () {
           }).catch(console.log);
 
           return new Promise((f, r) =>
-            setTimeout(f, 20000));
+            setTimeout(() => { cs.stop(); f(); }, 20000));
         });
       })
   );
