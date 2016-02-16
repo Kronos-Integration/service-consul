@@ -19,7 +19,7 @@ const consul = require('consul')({
 			});
 		}
 	}),
-	uuid = require('node-uuid'),
+	address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
 	service = require('kronos-service'),
@@ -42,8 +42,9 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
+		// id of our node in the consul cluster
 		Object.defineProperty(this, 'id', {
-			value: uuid.v4()
+			value: address()
 		});
 
 		Object.defineProperty(this, 'consul', {
