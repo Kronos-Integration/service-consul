@@ -136,7 +136,7 @@ class ServiceConsul extends service.Service {
 	 * @return {Promise} that fullfills when the deregitering has finished
 	 */
 	_stop() {
-		return consul.agent.service.deregister().then(f => {
+		return consul.agent.service.deregister(this.serviceDefinition.id).then(f => {
 			this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
 			return Promise.resolve();
 		});
@@ -148,8 +148,8 @@ class ServiceConsul extends service.Service {
 	 */
 	update(delay) {
 		const reregister = () =>
-			consul.agent.service.deregister(this.consulDefinition.id)
-			.then(() => consul.agent.service.register(this.consulDefinition));
+			consul.agent.service.deregister(this.serviceDefinition.id)
+			.then(() => consul.agent.service.register(this.serviceDefinition));
 
 		if (this._updateTimer) {
 			clearTimeout(this._updateTimer);
