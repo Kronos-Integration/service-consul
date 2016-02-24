@@ -22,6 +22,7 @@ describe('consul service', function () {
         const cs = manager.services.registry;
 
         assert.equal(cs.name, "registry");
+        assert.equal(cs.type, "consul");
 
         return cs.start().then(f => {
           assert.equal(cs.state, "running");
@@ -53,7 +54,10 @@ describe('consul service', function () {
           }).catch(console.log);
 
           return new Promise((f, r) =>
-            setTimeout(() => { cs.stop(); f(); }, 20000));
+            setTimeout(() => {
+              cs.stop();
+              f();
+            }, 20000));
         });
       })
   );
