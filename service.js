@@ -63,7 +63,7 @@ class ServiceConsul extends service.Service {
 	get serviceDefinition() {
 		return {
 			name: "kronos",
-			id: address(),
+			id: this.id,
 			port: this.listener.port,
 			address: this.listener.hostname,
 			tags: this.tags,
