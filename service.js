@@ -87,7 +87,7 @@ class ServiceConsul extends service.Service {
 			// wait until health-check and koa services are present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 				"listener": {
-					name: "admin",
+					name: "koa-admin",
 					type: "koa"
 				},
 				"hcs": {
