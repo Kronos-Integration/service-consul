@@ -37,7 +37,7 @@
   "dependencies": {
     "consul": "0.24.0",
     "koa-route": "3.1.0",
-    "kronos-service": "2.12.4",
+    "kronos-service": "2.12.5",
     "network-address": "1.1.0"
   },
   "repository": {
