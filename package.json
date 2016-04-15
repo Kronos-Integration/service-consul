@@ -28,16 +28,16 @@
     "cz-conventional-changelog": "1.1.5",
     "istanbul": "0.4.3",
     "jsdoc": "3.4.0",
-    "kronos-service-health-check": "^2.4.8",
-    "kronos-service-koa": "2.9.3",
-    "kronos-service-manager": "^3.2.17",
+    "kronos-service-health-check": "2.4.11",
+    "kronos-service-koa": "2.10.0",
+    "kronos-service-manager": "3.2.19",
     "mocha": "2.4.5",
     "semantic-release": "6.2.1"
   },
   "dependencies": {
     "consul": "0.25.0",
     "koa-route": "3.1.0",
-    "kronos-service": "^2.16.2",
+    "kronos-service": "2.17.0",
     "network-address": "1.1.0"
   },
   "repository": {
