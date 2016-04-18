@@ -2,24 +2,7 @@
 
 'use strict';
 
-const consul = require('consul')({
-		promisify(fn) {
-			return new Promise((resolve, reject) => {
-				try {
-					return fn((err, data, res) => {
-						if (err) {
-							err.res = res;
-							return reject(err);
-						}
-						return resolve([data, res]);
-					});
-				} catch (err) {
-					return reject(err);
-				}
-			});
-		}
-	}),
-	address = require('network-address'),
+const address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
 	service = require('kronos-service'),
@@ -47,10 +30,6 @@ class ServiceConsul extends service.Service {
 			value: address()
 		});
 
-		Object.defineProperty(this, 'consul', {
-			value: consul
-		});
-
 		Object.defineProperty(this, 'checkPath', {
 			value: config.checkPath || '/check'
 		});
@@ -58,6 +37,34 @@ class ServiceConsul extends service.Service {
 		Object.defineProperty(this, 'checkInterval', {
 			value: config.checkInterval || '10s'
 		});
+	}
+
+	_configure(config) {
+		const options = {
+			promisify(fn) {
+				return new Promise((resolve, reject) => {
+					try {
+						return fn((err, data, res) => {
+							if (err) {
+								err.res = res;
+								return reject(err);
+							}
+							return resolve([data, res]);
+						});
+					} catch (err) {
+						return reject(err);
+					}
+				});
+			}
+		};
+
+		['host', 'port', 'secure'].forEach(name => {
+			if (config[name] !== undefined) {
+				options[name] = config[name];
+			}
+		});
+
+		this.consul = require('consul')(options);
 	}
 
 	get serviceDefinition() {
@@ -96,10 +103,10 @@ class ServiceConsul extends service.Service {
 				}
 			}, this.owner, true).then(() =>
 				this.listener.start().then(() =>
-					consul.agent.service.register(this.serviceDefinition).then(f => {
-						consul.status.leader().then(leader => this.info(level =>
+					this.consul.agent.service.register(this.serviceDefinition).then(f => {
+						this.consul.status.leader().then(leader => this.info(level =>
 							`Consul raft leader is ${Object.keys(leader).join(',')}`));
-						consul.status.peers().then(peers => this.info(level =>
+						this.consul.status.peers().then(peers => this.info(level =>
 							`Consul raft peers are ${peers.map(p => p.body)}`));
 						this.kronosNodes().then(nodes => this.info(level =>
 							`Kronos nodes are ${nodes[0].map( n => n.ServiceID)}`));
@@ -138,7 +145,7 @@ class ServiceConsul extends service.Service {
 	 * @return {Promise} that fullfills when the deregitering has finished
 	 */
 	_stop() {
-		return consul.agent.service.deregister(this.serviceDefinition.id).then(f => {
+		return this.consul.agent.service.deregister(this.serviceDefinition.id).then(f => {
 			this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
 			return Promise.resolve();
 		});
@@ -150,8 +157,8 @@ class ServiceConsul extends service.Service {
 	 */
 	update(delay) {
 		const reregister = () =>
-			consul.agent.service.deregister(this.serviceDefinition.id)
-			.then(() => consul.agent.service.register(this.serviceDefinition));
+			this.consul.agent.service.deregister(this.serviceDefinition.id)
+			.then(() => this.consul.agent.service.register(this.serviceDefinition));
 
 		if (this._updateTimer) {
 			clearTimeout(this._updateTimer);
@@ -165,7 +172,7 @@ class ServiceConsul extends service.Service {
 	}
 
 	kronosNodes() {
-		return consul.catalog.service.nodes({
+		return this.consul.catalog.service.nodes({
 			service: this.serviceDefinition.name
 		});
 	}
@@ -179,7 +186,7 @@ class ServiceConsul extends service.Service {
 
 		const u = url.parse(options.url);
 
-		return consul.kv.set({
+		return this.consul.kv.set({
 			key: `services/${name}/${this.id}/url`,
 			value: options.url
 		});
@@ -207,7 +214,7 @@ class ServiceConsul extends service.Service {
 			name: name
 		});
 
-		return consul.kv.del({
+		return this.consul.kv.del({
 			key: `services/${name}/${this.id}`,
 			recurse: true
 		});
@@ -218,7 +225,7 @@ class ServiceConsul extends service.Service {
 	* serviceURLs(name) {
 		let si = [];
 
-		let firstPromise = consul.kv.get({
+		let firstPromise = this.consul.kv.get({
 				key: `services/${name}`,
 				recurse: true
 			})
