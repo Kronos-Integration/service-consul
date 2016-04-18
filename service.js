@@ -1,6 +1,6 @@
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const consul = require('consul')({
 		promisify(fn) {
@@ -28,7 +28,7 @@ const consul = require('consul')({
 class ServiceConsul extends service.Service {
 
 	static get name() {
-		return "consul";
+		return 'consul';
 	}
 
 	get type() {
@@ -62,16 +62,16 @@ class ServiceConsul extends service.Service {
 
 	get serviceDefinition() {
 		return {
-			name: "kronos",
+			name: 'kronos',
 			id: this.id,
 			port: this.listener.port,
 			address: this.listener.hostname,
 			tags: this.tags,
 			check: {
-				"id": this.listener.url + this.checkPath,
-				"http": this.listener.url + this.checkPath,
-				"interval": this.checkInterval,
-				"timeout": "1s"
+				id: this.listener.url + this.checkPath,
+				http: this.listener.url + this.checkPath,
+				interval: this.checkInterval,
+				timeout: '1s'
 			}
 		};
 	}
@@ -86,12 +86,13 @@ class ServiceConsul extends service.Service {
 
 			// wait until health-check and koa services are present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
-				"listener": {
-					name: "koa-admin",
-					type: "koa"
+				listener: {
+					name: 'koa-admin',
+					type: 'koa'
 				},
-				"hcs": {
-					type: "health-check"
+				hcs: {
+					name: 'health-check',
+					type: 'health-check'
 				}
 			}, this.owner, true).then(() =>
 				this.listener.start().then(() =>

@@ -1,7 +1,7 @@
 /* global describe, it*/
 /* jslint node: true, esnext: true */
 
-"use strict";
+'use strict';
 
 const chai = require('chai'),
   assert = chai.assert,
@@ -13,31 +13,31 @@ const chai = require('chai'),
 
 describe('consul service', function () {
   this.timeout(30000);
-  it("create", () =>
+  it('create', () =>
     ksm.manager([{}, {
-      name: "consul",
+      name: 'consul',
       port: 4713
     }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
         const cs = manager.services.registry;
 
-        assert.equal(cs.name, "registry");
-        assert.equal(cs.type, "consul");
+        assert.equal(cs.name, 'registry');
+        assert.equal(cs.type, 'consul');
 
         return cs.start().then(f => {
-          assert.equal(cs.state, "running");
+          assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
 
           cs.registerService('myService', {
-            url: cs.listener.url + "/somepath"
+            url: cs.listener.url + '/somepath'
           }).then(() => {
             const us = cs.serviceURLs('myService');
 
-            us.next().value.then(u => assert.equal(u, cs.listener.url + "/somepath"));
+            us.next().value.then(u => assert.equal(u, cs.listener.url + '/somepath'));
 
             setInterval(() =>
               us.next().value.then(u => {
-                assert.equal(u, cs.listener.url + "/somepath");
+                assert.equal(u, cs.listener.url + '/somepath');
                 console.log(`myService: ${u}`);
               }),
               1000);
