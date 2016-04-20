@@ -58,7 +58,7 @@ class ServiceConsul extends service.Service {
 			}
 		};
 
-		['host', 'port', 'secure'].forEach(name => {
+		['host', 'port', 'secure', 'ca'].forEach(name => {
 			if (config[name] !== undefined) {
 				options[name] = config[name];
 			}
