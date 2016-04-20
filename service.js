@@ -43,7 +43,24 @@ class ServiceConsul extends service.Service {
 			value: config.checkTimeout || '5s'
 		});
 
-		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => this.kronosNodes();
+		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => {
+			if (request.update) {
+				const watch = this.consul.watch({
+					method: this.consul.catalog.service.nodes,
+					options: {
+						service: this.serviceDefinition.name
+					}
+				});
+
+				watch.on('change', (data, res) => {
+					this.info(data);
+				});
+
+				watch.on('error', err => this.error(err));
+			}
+
+			return this.kronosNodes();
+		};
 	}
 
 	_configure(config) {
@@ -135,6 +152,7 @@ class ServiceConsul extends service.Service {
 							})
 						));
 
+
 						return Promise.resolve();
 					})
 				)
@@ -188,21 +206,20 @@ class ServiceConsul extends service.Service {
 
 		const u = url.parse(options.url);
 
-		const watch = this.consul.watch({
-			method: this.consul.kv.get,
-			options: {
-				key: `services/${name}/${this.id}/url`
-			}
-		});
+		/*
+				const watch = this.consul.watch({
+					method: this.consul.kv.get,
+					options: {
+						key: `services/${name}/${this.id}/url`
+					}
+				});
 
-		watch.on('change', (data, res) => {
-			console.log('change data:', data);
-		});
+				watch.on('change', (data, res) => {
+					console.log('change data:', data);
+				});
 
-		watch.on('error', err => {
-			console.log('error:', err);
-		});
-
+				watch.on('error', err => console.log('error:', err));
+		*/
 
 		return this.consul.kv.set({
 			key: `services/${name}/${this.id}/url`,
@@ -217,7 +234,6 @@ class ServiceConsul extends service.Service {
 					port: parseInt(u.port, 10),
 					tags: options.tags
 				};
-
 
 				return consul.agent.service.register(serviceDefinition).then(f => {
 					//this.info(`registered: ${JSON.stringify(f)}`);

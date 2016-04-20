@@ -31,7 +31,9 @@ describe('consul service', function () {
 
           const te = new endpoint.SendEndpoint('test', {});
           te.connected = cs.endpoints.nodes;
-          te.receive({}).then(r => {
+          te.receive({
+            update: true
+          }).then(r => {
             console.log(r);
             //assert.equal(r[0].ServiceName, 'kronos');
           });
