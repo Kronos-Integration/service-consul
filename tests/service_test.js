@@ -8,6 +8,7 @@ const chai = require('chai'),
   expect = chai.expect,
   should = chai.should(),
   ksm = require('kronos-service-manager'),
+  endpoint = require('kronos-endpoint'),
   ServiceConsul = require('../service.js');
 
 
@@ -27,6 +28,13 @@ describe('consul service', function () {
         return cs.start().then(f => {
           assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
+
+          const te = new endpoint.SendEndpoint('test', {});
+          te.connected = cs.endpoints.nodes;
+          te.receive({}).then(r => {
+            console.log(r);
+            //assert.equal(r[0].ServiceName, 'kronos');
+          });
 
           cs.registerService('myService', {
             url: cs.listener.url + '/somepath'
