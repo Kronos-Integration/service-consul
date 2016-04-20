@@ -112,12 +112,7 @@ class ServiceConsul extends service.Service {
 						this.consul.status.peers().then(peers => this.info(level =>
 							`Consul raft peers are ${peers.map(p => p.body)}`));
 						this.kronosNodes().then(nodes => this.info(level =>
-							`Kronos nodes are ${nodes[0].map( n => n.ServiceID)}`));
-
-						/*
-												this.kronosNodes().then(nodes => this.info(level =>
-													`Kronos nodes are ${nodes.map(n => JSON.stringify(n.body))}`)).catch(console.log);
-						*/
+							`Kronos nodes are ${nodes.map( n => n.ServiceID)}`));
 
 						this._stepRegisteredListener = step => {
 							this.tags = Object.keys(this.owner.steps);
@@ -177,7 +172,7 @@ class ServiceConsul extends service.Service {
 	kronosNodes() {
 		return this.consul.catalog.service.nodes({
 			service: this.serviceDefinition.name
-		});
+		}).then(response => response[0]);
 	}
 
 	registerService(name, options) {
