@@ -188,6 +188,22 @@ class ServiceConsul extends service.Service {
 
 		const u = url.parse(options.url);
 
+		const watch = this.consul.watch({
+			method: this.consul.kv.get,
+			options: {
+				key: `services/${name}/${this.id}/url`
+			}
+		});
+
+		watch.on('change', (data, res) => {
+			console.log('change data:', data);
+		});
+
+		watch.on('error', err => {
+			console.log('error:', err);
+		});
+
+
 		return this.consul.kv.set({
 			key: `services/${name}/${this.id}/url`,
 			value: options.url
