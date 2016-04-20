@@ -5,6 +5,7 @@
 const address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
+	endpoint = require('kronos-endpoint'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
@@ -27,7 +28,7 @@ class ServiceConsul extends service.Service {
 
 		// id of our node in the consul cluster
 		Object.defineProperty(this, 'id', {
-			value: address()
+			value: config.id || address()
 		});
 
 		Object.defineProperty(this, 'checkPath', {
@@ -37,6 +38,8 @@ class ServiceConsul extends service.Service {
 		Object.defineProperty(this, 'checkInterval', {
 			value: config.checkInterval || '10s'
 		});
+
+		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => this.kronosNodes();
 	}
 
 	_configure(config) {
