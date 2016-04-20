@@ -9,6 +9,22 @@ const address = require('network-address'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
+const attributes = {
+	'id': {
+		// id of our node in the consul cluster
+		default: address()
+	},
+	'checkPath': {
+		default: '/check'
+	},
+	'checkInterval': {
+		default: '10s'
+	},
+	'checkTimeout': {
+		default: '5s'
+	}
+};
+
 class ServiceConsul extends service.Service {
 
 	static get name() {
@@ -26,21 +42,10 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		// id of our node in the consul cluster
-		Object.defineProperty(this, 'id', {
-			value: config.id || address()
-		});
-
-		Object.defineProperty(this, 'checkPath', {
-			value: config.checkPath || '/check'
-		});
-
-		Object.defineProperty(this, 'checkInterval', {
-			value: config.checkInterval || '10s'
-		});
-
-		Object.defineProperty(this, 'checkTimeout', {
-			value: config.checkTimeout || '5s'
+		Object.keys(attributes).forEach(name => {
+			Object.defineProperty(this, name, {
+				value: config[name] || attributes[name].default
+			});
 		});
 
 		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => {
