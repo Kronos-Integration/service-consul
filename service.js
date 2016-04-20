@@ -39,6 +39,10 @@ class ServiceConsul extends service.Service {
 			value: config.checkInterval || '10s'
 		});
 
+		Object.defineProperty(this, 'checkTimeout', {
+			value: config.checkTimeout || '5s'
+		});
+
 		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => this.kronosNodes();
 	}
 
@@ -81,7 +85,7 @@ class ServiceConsul extends service.Service {
 				id: this.listener.url + this.checkPath,
 				http: this.listener.url + this.checkPath,
 				interval: this.checkInterval,
-				timeout: '1s'
+				timeout: this.checkTimeout
 			}
 		};
 	}
