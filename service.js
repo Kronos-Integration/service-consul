@@ -71,7 +71,7 @@ class ServiceConsul extends service.Service {
 	}
 
 	_configure(config) {
-		super._configure(config);
+		const modified = super._configure(config);
 
 		const options = {
 			promisify(fn) {
@@ -98,6 +98,8 @@ class ServiceConsul extends service.Service {
 		});
 
 		this.consul = require('consul')(options);
+
+		return modified;
 	}
 
 	get serviceDefinition() {
