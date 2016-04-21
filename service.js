@@ -119,7 +119,7 @@ class ServiceConsul extends service.Service {
 	}
 
 	/**
-	 * Register the service in consul
+	 * Register the kronos service in consul
 	 * @return {Promise} that fullfills on succesfull startup
 	 */
 	_start() {
