@@ -9,24 +9,7 @@ const address = require('network-address'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
-const attributes = {
-	'id': {
-		// id of our node in the consul cluster
-		default: address()
-	},
-	'checkPath': {
-		default: '/check'
-	},
-	'checkInterval': {
-		default: '10s'
-	},
-	'checkTimeout': {
-		default: '5s'
-	}
-};
-
 class ServiceConsul extends service.Service {
-
 	static get name() {
 		return 'consul';
 	}
@@ -42,11 +25,13 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		Object.keys(attributes).forEach(name => {
-			Object.defineProperty(this, name, {
-				value: config[name] || attributes[name].default
-			});
-		});
+		/*
+				Object.keys(attributes).forEach(name => {
+					Object.defineProperty(this, name, {
+						value: config[name] || attributes[name].default
+					});
+				});
+		*/
 
 		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => {
 			if (request.update) {
@@ -68,7 +53,27 @@ class ServiceConsul extends service.Service {
 		};
 	}
 
+	get configurationAttributes() {
+		return Object.assign({
+			'id': {
+				// id of our node in the consul cluster
+				default: address()
+			},
+			'checkPath': {
+				default: '/check'
+			},
+			'checkInterval': {
+				default: '10s'
+			},
+			'checkTimeout': {
+				default: '5s'
+			}
+		}, super.configurationAttributes);
+	}
+
 	_configure(config) {
+		super._configure(config);
+
 		const options = {
 			promisify(fn) {
 				return new Promise((resolve, reject) => {
@@ -156,7 +161,6 @@ class ServiceConsul extends service.Service {
 								ctx.body = r ? 'OK' : 'ERROR';
 							})
 						));
-
 
 						return Promise.resolve();
 					})
