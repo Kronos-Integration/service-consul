@@ -25,14 +25,6 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		/*
-				Object.keys(attributes).forEach(name => {
-					Object.defineProperty(this, name, {
-						value: config[name] || attributes[name].default
-					});
-				});
-		*/
-
 		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => {
 			if (request.update) {
 				const watch = this.consul.watch({
@@ -55,6 +47,13 @@ class ServiceConsul extends service.Service {
 
 	get configurationAttributes() {
 		return Object.assign({
+			/*
+			'host' : { default: 'localhost' },
+			'port': { default: 8500 },
+			'secure': { default: false },
+			'ca': {},
+			*/
+
 			'id': {
 				// id of our node in the consul cluster
 				default: address()
