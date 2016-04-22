@@ -29,7 +29,14 @@ describe('consul service', function () {
           assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
 
-          const te = new endpoint.SendEndpoint('test', {});
+          const te = new endpoint.SendEndpoint('test', {}, {
+            createOpposite: true
+          });
+
+          te.opposite.receive = request => {
+            console.log(`te.opposite.receive: ${JSON.stringify(request)}`);
+          };
+
           te.connected = cs.endpoints.nodes;
           te.receive({
             update: true

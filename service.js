@@ -25,7 +25,12 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		this.addEndpoint(new endpoint.ReceiveEndpoint('nodes', this)).receive = request => {
+		const nodesEndpoint = new endpoint.ReceiveEndpoint('nodes', this, {
+			createOpposite: true
+		});
+
+		//console.log(`opposite: ${nodesEndpoint.opposite}`);
+		nodesEndpoint.receive = request => {
 			if (request.update) {
 				const watch = this.consul.watch({
 					method: this.consul.catalog.service.nodes,
@@ -36,6 +41,7 @@ class ServiceConsul extends service.Service {
 
 				watch.on('change', (data, res) => {
 					this.info(data);
+					nodesEndpoint.opposite.receive(data);
 				});
 
 				watch.on('error', err => this.error(err));
@@ -43,6 +49,8 @@ class ServiceConsul extends service.Service {
 
 			return this.kronosNodes();
 		};
+
+		this.addEndpoint(nodesEndpoint);
 	}
 
 	get configurationAttributes() {
