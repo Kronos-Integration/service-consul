@@ -63,16 +63,20 @@ class ServiceConsul extends service.Service {
 			*/
 
 			'id': {
+				description: 'kronos service id',
 				// id of our node in the consul cluster
 				default: address()
 			},
 			'checkPath': {
+				description: 'url path used for the kronos check',
 				default: '/check'
 			},
 			'checkInterval': {
+				description: 'interval the kronos check is called',
 				default: '10s'
 			},
 			'checkTimeout': {
+				description: 'timeout for the kronos check interval',
 				default: '5s'
 			}
 		}, super.configurationAttributes);
