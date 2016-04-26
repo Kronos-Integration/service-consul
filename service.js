@@ -29,7 +29,6 @@ class ServiceConsul extends service.Service {
 			createOpposite: true
 		});
 
-		//console.log(`opposite: ${nodesEndpoint.opposite}`);
 		nodesEndpoint.receive = request => {
 			if (request.update) {
 				const watch = this.consul.watch({
