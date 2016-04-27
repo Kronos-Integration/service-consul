@@ -8,9 +8,9 @@
   ],
   "scripts": {
     "cover": "node ./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests/*_test.js",
-    "test": "mocha tests/*_test.js",
+    "test": "node ./node_modules/.bin/mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "doc": "jsdoc lib/*.js"
+    "doc": "node ./node_modules/.bin/jsdoc lib/*.js"
   },
   "contributors": [
     {
@@ -45,7 +45,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=5"
+    "node": ">=6"
   },
   "config": {
     "commitizen": {
