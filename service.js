@@ -117,7 +117,7 @@ class ServiceConsul extends service.Service {
 
 	get serviceDefinition() {
 		function asSeconds(value) {
-			return value.match(/s$/) ? value : `${value}s`;
+			return value instanceof String && value.matches(/s$/) ? value : `${value}s`;
 		}
 
 		return {

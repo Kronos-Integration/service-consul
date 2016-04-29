@@ -17,7 +17,8 @@ describe('consul service', function () {
   it('create', () =>
     ksm.manager([{}, {
       name: 'consul',
-      port: 4713
+      port: 4713,
+      checkInterval: 100
     }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
         const cs = manager.services.registry;
