@@ -158,7 +158,7 @@ class ServiceConsul extends service.Service {
 					this.consul.agent.service.register(this.serviceDefinition).then(f => {
 						this.consul.status.leader().then(leader => this.info(level =>
 							`Consul raft leader is ${Object.keys(leader).join(',')}`));
-						this.consul.status.peers().then(peers => this.info(level =>
+						this.consul.status.peers().then(peers => this.trace(level =>
 							`Consul raft peers are ${peers.map(p => p.body)}`));
 						this.kronosNodes().then(nodes => this.info(level =>
 							`Kronos nodes are ${nodes.map( n => n.ServiceID)}`));
