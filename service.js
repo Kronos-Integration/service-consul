@@ -117,7 +117,7 @@ class ServiceConsul extends service.Service {
 
 	get serviceDefinition() {
 		function asSeconds(value) {
-			return `${value}s`;
+			return value.match(/s$/) ? value : `${value}s`;
 		}
 
 		return {
@@ -193,7 +193,10 @@ class ServiceConsul extends service.Service {
 	 */
 	_stop() {
 		return this.consul.agent.service.deregister(this.serviceDefinition.id).then(f => {
-			this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
+			if (this._stepRegisteredListener) {
+				this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
+				this._stepRegisteredListener = undefined;
+			}
 			return Promise.resolve();
 		});
 	}
