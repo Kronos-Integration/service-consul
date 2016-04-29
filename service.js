@@ -72,11 +72,13 @@ class ServiceConsul extends service.Service {
 			},
 			'checkInterval': {
 				description: 'interval the kronos check is called',
-				default: '10s'
+				default: '10',
+				type: 'duration'
 			},
 			'checkTimeout': {
 				description: 'timeout for the kronos check interval',
-				default: '5s'
+				default: '5',
+				type: 'duration'
 			}
 		}, super.configurationAttributes);
 	}
@@ -114,6 +116,10 @@ class ServiceConsul extends service.Service {
 	}
 
 	get serviceDefinition() {
+		function asSeconds(value) {
+			return `${value}s`;
+		}
+
 		return {
 			name: 'kronos',
 			id: this.id,
@@ -123,8 +129,8 @@ class ServiceConsul extends service.Service {
 			check: {
 				id: this.listener.url + this.checkPath,
 				http: this.listener.url + this.checkPath,
-				interval: this.checkInterval,
-				timeout: this.checkTimeout
+				interval: asSeconds(this.checkInterval),
+				timeout: asSeconds(this.checkTimeout)
 			}
 		};
 	}
