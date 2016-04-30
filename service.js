@@ -53,21 +53,42 @@ class ServiceConsul extends service.Service {
 	}
 
 	get configurationAttributes() {
-		return Object.assign({
-			/*
-			'host' : { default: 'localhost' },
-			'port': { default: 8500 },
-			'secure': { default: false },
-			'ca': {},
-			*/
+		const co = this.consulOptions;
 
+		function consulOptionSetter(value, attribute) {
+			co[attribute.name] = value;
+		}
+
+		return Object.assign({
+			'host': {
+				description: 'consul host',
+				default: 'localhost',
+				type: 'string',
+				setter: consulOptionSetter
+			},
+			'port': {
+				description: 'consul port',
+				default: 8500,
+				type: 'integer',
+				setter: consulOptionSetter
+			},
+			'secure': {
+				default: false,
+				type: 'boolean',
+				setter: consulOptionSetter
+			},
+			'ca': {
+				setter: consulOptionSetter
+			},
 			'id': {
 				description: 'kronos service id',
+				type: 'string',
 				// id of our node in the consul cluster
 				default: address()
 			},
 			'checkPath': {
 				description: 'url path used for the kronos check',
+				type: 'string',
 				default: '/check'
 			},
 			'checkInterval': {
@@ -84,33 +105,28 @@ class ServiceConsul extends service.Service {
 	}
 
 	_configure(config) {
+		if (this.consulOptions === undefined) {
+			this.consulOptions = {
+				promisify(fn) {
+					return new Promise((resolve, reject) => {
+						try {
+							return fn((err, data, res) => {
+								if (err) {
+									err.res = res;
+									return reject(err);
+								}
+								return resolve([data, res]);
+							});
+						} catch (err) {
+							return reject(err);
+						}
+					});
+				}
+			};
+		}
+
 		const modified = super._configure(config);
-
-		const options = {
-			promisify(fn) {
-				return new Promise((resolve, reject) => {
-					try {
-						return fn((err, data, res) => {
-							if (err) {
-								err.res = res;
-								return reject(err);
-							}
-							return resolve([data, res]);
-						});
-					} catch (err) {
-						return reject(err);
-					}
-				});
-			}
-		};
-
-		['host', 'port', 'secure', 'ca'].forEach(name => {
-			if (config[name] !== undefined) {
-				options[name] = config[name];
-			}
-		});
-
-		this.consul = require('consul')(options);
+		this.consul = require('consul')(this.consulOptions);
 
 		return modified;
 	}
