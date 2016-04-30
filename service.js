@@ -56,7 +56,9 @@ class ServiceConsul extends service.Service {
 		const co = this.consulOptions;
 
 		function consulOptionSetter(value, attribute) {
-			co[attribute.name] = value;
+			if (value !== undefined) {
+				co[attribute.name] = value;
+			}
 		}
 
 		return Object.assign({
@@ -126,6 +128,10 @@ class ServiceConsul extends service.Service {
 		}
 
 		const modified = super._configure(config);
+
+		// TODO where does baseUrl come from ?
+		delete this.consulOptions.baseUrl;
+
 		this.consul = require('consul')(this.consulOptions);
 
 		return modified;
