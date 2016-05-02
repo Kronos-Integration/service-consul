@@ -157,13 +157,16 @@ class ServiceConsul extends service.Service {
 		};
 	}
 
-	/**
-	 * Register the kronos service in consul
-	 * @return {Promise} that fullfills on succesfull startup
-	 */
+	updateTags() {
+			this.tags = Object.keys(this.owner.steps).map(name => `step:${name}`);
+		}
+		/**
+		 * Register the kronos service in consul
+		 * @return {Promise} that fullfills on succesfull startup
+		 */
 	_start() {
 		return super._start().then(() => {
-			this.tags = Object.keys(this.owner.steps);
+			this.updateTags();
 
 			// wait until health-check and koa services are present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
@@ -186,7 +189,7 @@ class ServiceConsul extends service.Service {
 							`Kronos nodes are ${nodes.map( n => n.ServiceID)}`));
 
 						this._stepRegisteredListener = step => {
-							this.tags = Object.keys(this.owner.steps);
+							this.updateTags();
 							this.update(5000);
 						};
 
