@@ -62,45 +62,45 @@ class ServiceConsul extends service.Service {
 		}
 
 		return Object.assign({
-			'host': {
+			host: {
 				description: 'consul host',
 				default: 'localhost',
 				type: 'string',
 				setter: consulOptionSetter
 			},
-			'port': {
+			port: {
 				description: 'consul port',
 				default: 8500,
 				type: 'integer',
 				setter: consulOptionSetter
 			},
-			'secure': {
+			secure: {
 				default: false,
 				type: 'boolean',
 				setter: consulOptionSetter
 			},
-			'ca': {
+			ca: {
 				setter: consulOptionSetter
 			},
-			'id': {
+			id: {
 				description: 'kronos service id',
 				type: 'string',
 				// id of our node in the consul cluster
 				default: address()
 			},
-			'checkPath': {
+			checkPath: {
 				description: 'url path used for the kronos check',
 				type: 'string',
 				default: '/check'
 			},
-			'checkInterval': {
+			checkInterval: {
 				description: 'interval the kronos check is called',
-				default: '10',
+				default: 10,
 				type: 'duration'
 			},
-			'checkTimeout': {
+			checkTimeout: {
 				description: 'timeout for the kronos check interval',
-				default: '5',
+				default: 5,
 				type: 'duration'
 			}
 		}, super.configurationAttributes);
