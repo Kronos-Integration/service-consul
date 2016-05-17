@@ -30,7 +30,7 @@ class ServiceConsul extends service.Service {
 		});
 
 		nodesEndpoint.receive = request => {
-			if (request.update) {
+			if (request && request.update) {
 				const watch = this.consul.watch({
 					method: this.consul.catalog.service.nodes,
 					options: {
