@@ -44,6 +44,9 @@ describe('consul service', function () {
           }).then(r => {
             console.log(r);
             //assert.equal(r[0].ServiceName, 'kronos');
+            te.receive({
+              update: false
+            });
           });
 
           cs.registerService('myService', {

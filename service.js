@@ -29,21 +29,28 @@ class ServiceConsul extends service.Service {
 			createOpposite: true
 		});
 
+		let watch;
+
 		nodesEndpoint.receive = request => {
-			if (request && request.update) {
-				const watch = this.consul.watch({
-					method: this.consul.catalog.service.nodes,
-					options: {
-						service: this.serviceDefinition.name
-					}
-				});
+			if (request) {
+				if (request.update && watch === undefined) {
+					watch = this.consul.watch({
+						method: this.consul.catalog.service.nodes,
+						options: {
+							service: this.serviceDefinition.name
+						}
+					});
 
-				watch.on('change', (data, res) => {
-					this.info(data);
-					nodesEndpoint.opposite.receive(data);
-				});
+					watch.on('change', (data, res) => {
+						this.info(data);
+						nodesEndpoint.opposite.receive(data);
+					});
 
-				watch.on('error', err => this.error(err));
+					watch.on('error', err => this.error(err));
+				} else if (request.update === false && watch) {
+					watch.end();
+					watch = undefined;
+				}
 			}
 
 			return this.kronosNodes();
