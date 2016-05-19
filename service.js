@@ -165,12 +165,21 @@ class ServiceConsul extends service.Service {
 	}
 
 	updateTags() {
-			this.tags = Object.keys(this.owner.steps).map(name => `step:${name}`);
+		this.tags = Object.keys(this.owner.steps).map(name => `step:${name}`);
+	}
+
+	timeoutForTransition(transition) {
+		if (transition.name === 'start') {
+			return 600000;
 		}
-		/**
-		 * Register the kronos service in consul
-		 * @return {Promise} that fullfills on succesfull startup
-		 */
+
+		return super.timeoutForTransition(transition);
+	}
+
+	/**
+	 * Register the kronos service in consul
+	 * @return {Promise} that fullfills on succesfull startup
+	 */
 	_start() {
 		return super._start().then(() => {
 			this.updateTags();
