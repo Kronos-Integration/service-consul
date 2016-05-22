@@ -25,11 +25,32 @@ class ServiceConsul extends service.Service {
 	constructor(config, owner) {
 		super(config, owner);
 
-		const nodesEndpoint = new endpoint.ReceiveEndpoint('nodes', this, {
-			createOpposite: true
-		});
+		const svc = this;
 
 		let watch;
+
+		const nodesEndpoint = new endpoint.ReceiveEndpoint('nodes', this, {
+			createOpposite: true,
+			willBeClosed() {
+
+				this.trace({
+					endpoint: this,
+					state: 'open'
+				});
+
+				if (watch) {
+					watch.end();
+					watch = undefined;
+				}
+			},
+			hasBeenOpened() {
+				this.trace({
+					endpoint: this,
+					state: 'close'
+				});
+			}
+		});
+
 
 		nodesEndpoint.receive = request => {
 			if (request) {
@@ -153,7 +174,7 @@ class ServiceConsul extends service.Service {
 			name: 'kronos',
 			id: this.id,
 			port: this.listener.port,
-			address: this.listener.hostname,
+			address: this.listener.address,
 			tags: this.tags,
 			check: {
 				id: this.listener.url + this.checkPath,
