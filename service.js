@@ -151,7 +151,7 @@ class ServiceConsul extends service.Service {
 
 		return {
 			name: 'kronos',
-			id: this.id + ':' + this.listener.port, // TODO find a better way to get a unique service id
+			id: this.id,
 			port: this.listener.port,
 			address: this.listener.hostname,
 			tags: this.tags,
