@@ -30,7 +30,7 @@
     "jsdoc": "3.4.0",
     "kronos-service-health-check": "^2.9.5",
     "kronos-service-koa": "^2.17.4",
-    "kronos-service-manager": "^3.3.13",
+    "kronos-service-manager": "^3.4.0",
     "mocha": "2.5.1",
     "semantic-release": "6.2.2"
   },
