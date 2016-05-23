@@ -15,7 +15,9 @@ const chai = require('chai'),
 describe('consul service', function () {
   this.timeout(30000);
   it('create', () =>
-    ksm.manager([{}, {
+    ksm.manager([{
+      id: 'myId'
+    }, {
       name: 'consul',
       port: 4713,
       checkInterval: 100

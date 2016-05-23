@@ -110,12 +110,6 @@ class ServiceConsul extends service.Service {
 			ca: {
 				setter: consulOptionSetter
 			},
-			id: {
-				description: 'kronos service id',
-				type: 'string',
-				// id of our node in the consul cluster
-				default: address()
-			},
 			checkPath: {
 				description: 'url path used for the kronos check',
 				type: 'string',
@@ -172,7 +166,7 @@ class ServiceConsul extends service.Service {
 
 		return {
 			name: 'kronos',
-			id: this.id,
+			id: this.owner.id,
 			port: this.listener.port,
 			address: this.listener.address,
 			tags: this.tags,
@@ -314,7 +308,7 @@ class ServiceConsul extends service.Service {
 		*/
 
 		return this.consul.kv.set({
-			key: `services/${name}/${this.id}/url`,
+			key: `services/${name}/${this.owner.id}/url`,
 			value: options.url
 		});
 
