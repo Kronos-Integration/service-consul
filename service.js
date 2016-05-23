@@ -32,7 +32,6 @@ class ServiceConsul extends service.Service {
 		const nodesEndpoint = new endpoint.ReceiveEndpoint('nodes', this, {
 			createOpposite: true,
 			willBeClosed() {
-
 				this.trace({
 					endpoint: this,
 					state: 'open'
@@ -63,7 +62,6 @@ class ServiceConsul extends service.Service {
 					});
 
 					watch.on('change', (data, res) => {
-						this.info(data);
 						nodesEndpoint.opposite.receive(data);
 					});
 
