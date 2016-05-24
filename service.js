@@ -11,7 +11,6 @@ const address = require('network-address'),
 
 
 function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
-
 	let watch;
 
 	options.willBeClosed = function () {
@@ -256,13 +255,6 @@ class ServiceConsul extends service.Service {
 			}, this.owner, true).then(() =>
 				this.listener.start().then(() =>
 					this.consul.agent.service.register(this.serviceDefinition).then(f => {
-						this.consul.status.leader().then(leader => this.info(level =>
-							`Consul raft leader is ${Object.keys(leader).join(',')}`));
-						this.consul.status.peers().then(peers => this.trace(level =>
-							`Consul raft peers are ${peers.map(p => p.body)}`));
-						this.kronosNodes().then(nodes => this.info(level =>
-							`Kronos nodes are ${nodes.map( n => n.ServiceID)}`));
-
 						this._stepRegisteredListener = step => {
 							this.updateTags();
 							this.update(5000);
