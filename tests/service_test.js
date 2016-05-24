@@ -18,6 +18,7 @@ describe('consul service', function () {
     ksm.manager([{
       id: 'myId'
     }, {
+      logLevel: 'trace',
       name: 'consul',
       port: 4713,
       checkInterval: 100
@@ -31,6 +32,19 @@ describe('consul service', function () {
         return cs.start().then(f => {
           assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
+
+          const kv = new endpoint.ReceiveEndpoint('kv', {});
+          kv.receive = data => {
+            console.log(`kv.receive: ${data[0].Value}`);
+          };
+          cs.endpoints.kv.connected = kv;
+
+          let i = 0;
+
+          setInterval(() => {
+            cs.consul.kv.set('kronos', '' + i);
+            i = i + 1;
+          }, 2000);
 
           const te = new endpoint.SendEndpoint('test', {}, {
             createOpposite: true

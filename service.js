@@ -9,6 +9,45 @@ const address = require('network-address'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
+
+function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
+
+	let watch;
+
+	options.willBeClosed = function () {
+		owner.trace({
+			endpoint: this.identifier,
+			state: 'close'
+		});
+
+		if (watch) {
+			watch.end();
+			watch = undefined;
+		}
+	};
+
+	options.hasBeenConnected = function () {
+		owner.trace({
+			endpoint: this.identifier,
+			state: 'open'
+		});
+
+		watch = makeWatch();
+		watch.on('error', err => this.error(err));
+
+		watch.on('change', (data, res) => {
+			this.receive(data);
+		});
+
+		watch.on('error', err => owner.error({
+			error: err,
+			endpoint: this.identifier
+		}));
+	};
+
+	return new endpoint.SendEndpoint(name, owner, options);
+}
+
 class ServiceConsul extends service.Service {
 	static get name() {
 		return 'consul';
@@ -33,8 +72,8 @@ class ServiceConsul extends service.Service {
 			createOpposite: true,
 			willBeClosed() {
 				this.trace({
-					endpoint: this.identiferi,
-					state: 'open'
+					endpoint: this.identifier,
+					state: 'close'
 				});
 
 				if (watch) {
@@ -45,11 +84,10 @@ class ServiceConsul extends service.Service {
 			hasBeenOpened() {
 				this.trace({
 					endpoint: this.identifier,
-					state: 'close'
+					state: 'open'
 				});
 			}
 		});
-
 
 		nodesEndpoint.receive = request => {
 			if (request) {
@@ -76,6 +114,14 @@ class ServiceConsul extends service.Service {
 		};
 
 		this.addEndpoint(nodesEndpoint);
+
+		this.addEndpoint(createWatchSendEndpoint(() => this.consul.watch({
+			method: this.consul.kv.get,
+			options: {
+				key: 'kronos',
+				recurse: true
+			}
+		}), 'kv', this));
 	}
 
 	get configurationAttributes() {
@@ -374,6 +420,6 @@ class ServiceConsul extends service.Service {
 module.exports.registerWithManager = manager =>
 	manager.registerServiceFactory(ServiceConsul).then(sf =>
 		manager.declareService({
-			'type': sf.name,
-			'name': 'registry'
+			type: sf.name,
+			name: 'registry'
 		}));
