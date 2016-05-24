@@ -25,7 +25,7 @@ function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
 		}
 	};
 
-	options.hasBeenConnected = function () {
+	options.hasBeenOpened = function () {
 		owner.trace({
 			endpoint: this.identifier,
 			state: 'open'
