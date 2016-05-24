@@ -35,7 +35,7 @@ describe('consul service', function () {
 
           const kv = new endpoint.ReceiveEndpoint('kv', {});
           kv.receive = data => {
-            console.log(`kv.receive: ${data[0].Value}`);
+            console.log(`kv.receive: ${data ? data[0].Value : 'null'}`);
           };
           cs.endpoints.kv.connected = kv;
 
