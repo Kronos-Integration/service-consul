@@ -33,7 +33,7 @@ class ServiceConsul extends service.Service {
 			createOpposite: true,
 			willBeClosed() {
 				this.trace({
-					endpoint: this,
+					endpoint: this.identiferi,
 					state: 'open'
 				});
 
@@ -44,7 +44,7 @@ class ServiceConsul extends service.Service {
 			},
 			hasBeenOpened() {
 				this.trace({
-					endpoint: this,
+					endpoint: this.identifier,
 					state: 'close'
 				});
 			}
