@@ -259,7 +259,7 @@ class ServiceConsul extends service.Service {
 						this.listener.koa.use(route.get(this.checkPath, ctx =>
 							this.hcs.endpoints.state.receive({}).then(r => {
 								this.info({
-									'health': r
+									health: r
 								});
 								this.status = r ? 200 : 300;
 								ctx.body = r ? 'OK' : 'ERROR';
