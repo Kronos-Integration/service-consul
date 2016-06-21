@@ -33,10 +33,7 @@ function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
 
 		watch = makeWatch();
 		watch.on('error', err => this.error(err));
-
-		watch.on('change', (data, res) => {
-			this.receive(data);
-		});
+		watch.on('change', (data, res) => this.receive(data));
 
 		watch.on('error', err => owner.error({
 			error: err,
@@ -98,10 +95,7 @@ class ServiceConsul extends service.Service {
 						}
 					});
 
-					watch.on('change', (data, res) => {
-						nodesEndpoint.opposite.receive(data);
-					});
-
+					watch.on('change', (data, res) => nodesEndpoint.opposite.receive(data));
 					watch.on('error', err => this.error(err));
 				} else if (request.update === false && watch) {
 					watch.end();
