@@ -247,8 +247,8 @@ class ServiceConsul extends service.Service {
 					type: 'health-check'
 				}
 			}, this.owner, true).then(() =>
-				this.listener.start().then(() =>
-					this.consul.agent.service.register(this.serviceDefinition).then(f => {
+				this.listener.start().then(() => {
+					const registerService = fullfilled => {
 						this._stepRegisteredListener = step => {
 							this.updateTags();
 							this.update(5000);
@@ -258,17 +258,23 @@ class ServiceConsul extends service.Service {
 
 						this.listener.koa.use(route.get(this.checkPath, ctx =>
 							this.hcs.endpoints.state.receive({}).then(r => {
-								this.info({
-									health: r
-								});
 								this.status = r ? 200 : 300;
 								ctx.body = r ? 'OK' : 'ERROR';
 							})
 						));
 
 						return Promise.resolve();
-					})
-				)
+					};
+
+					return this.consul.agent.service.register(this.serviceDefinition).then(registerService, rejected => {
+						return new Promise((f, r) => {
+							// TODO find a better way to repeat initial registration until startup timeout is reached
+							setTimeout(() => {
+								f(this.consul.agent.service.register(this.serviceDefinition).then(registerService));
+							}, 10000);
+						});
+					});
+				})
 			);
 		});
 	}
