@@ -5,6 +5,7 @@
 const address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
+	PromiseRepeat = require('promise-repeat'),
 	endpoint = require('kronos-endpoint'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
@@ -32,9 +33,7 @@ function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
 		});
 
 		watch = makeWatch();
-		watch.on('error', err => this.error(err));
 		watch.on('change', (data, res) => this.receive(data));
-
 		watch.on('error', err => owner.error({
 			error: err,
 			endpoint: this.identifier
@@ -96,7 +95,7 @@ class ServiceConsul extends service.Service {
 					});
 
 					watch.on('change', (data, res) => nodesEndpoint.opposite.receive(data));
-					watch.on('error', err => this.error(err));
+					watch.on('error', err => svc.error(err));
 				} else if (request.update === false && watch) {
 					watch.end();
 					watch = undefined;
@@ -161,7 +160,13 @@ class ServiceConsul extends service.Service {
 				description: 'timeout for the kronos check interval',
 				default: 5,
 				type: 'duration'
+			},
+			startTimeout: {
+				description: 'timeout for the service startup',
+				default: 600,
+				type: 'duration'
 			}
+
 		}, super.configurationAttributes);
 	}
 
@@ -222,7 +227,7 @@ class ServiceConsul extends service.Service {
 
 	timeoutForTransition(transition) {
 		if (transition.name === 'start') {
-			return 600000;
+			return this.startTimeout * 1000; // 600000;
 		}
 
 		return super.timeoutForTransition(transition);
@@ -247,34 +252,31 @@ class ServiceConsul extends service.Service {
 					type: 'health-check'
 				}
 			}, this.owner, true).then(() =>
-				this.listener.start().then(() => {
-					const registerService = fullfilled => {
-						this._stepRegisteredListener = step => {
-							this.updateTags();
-							this.update(5000);
-						};
+				this.listener.start().then(() =>
+					PromiseRepeat(
+						() => this.consul.agent.service.register(this.serviceDefinition).then(fullfilled => {
+							this._stepRegisteredListener = step => {
+								this.updateTags();
+								this.update(5000);
+							};
 
-						this.owner.addListener('stepRegistered', this._stepRegisteredListener);
+							this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 
-						this.listener.koa.use(route.get(this.checkPath, ctx =>
-							this.hcs.endpoints.state.receive({}).then(r => {
-								this.status = r ? 200 : 300;
-								ctx.body = r ? 'OK' : 'ERROR';
-							})
-						));
+							this.listener.koa.use(route.get(this.checkPath, ctx =>
+								this.hcs.endpoints.state.receive({}).then(r => {
+									this.status = r ? 200 : 300;
+									ctx.body = r ? 'OK' : 'ERROR';
+								})
+							));
 
-						return Promise.resolve();
-					};
-
-					return this.consul.agent.service.register(this.serviceDefinition).then(registerService, rejected => {
-						return new Promise((f, r) => {
-							// TODO find a better way to repeat initial registration until startup timeout is reached
-							setTimeout(() => {
-								f(this.consul.agent.service.register(this.serviceDefinition).then(registerService));
-							}, 10000);
-						});
-					});
-				})
+							return Promise.resolve();
+						}), {
+							maxAttempts: 5,
+							minTimeout: 1000,
+							maxTimeout: this.startTimeout * 1000,
+							throttle: 1000
+						})
+				)
 			);
 		});
 	}
