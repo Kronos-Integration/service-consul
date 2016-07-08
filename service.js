@@ -196,8 +196,8 @@ class ServiceConsul extends service.Service {
 		// TODO where does baseUrl come from ?
 		delete this.consulOptions.baseUrl;
 
+		// TODO repeat here ?
 		this.consul = require('consul')(this.consulOptions);
-
 		return modified;
 	}
 
@@ -253,30 +253,31 @@ class ServiceConsul extends service.Service {
 				}
 			}, this.owner, true).then(() =>
 				this.listener.start().then(() =>
-					PromiseRepeat(
-						() => this.consul.agent.service.register(this.serviceDefinition).then(fullfilled => {
-							this._stepRegisteredListener = step => {
-								this.updateTags();
-								this.update(5000);
-							};
+					/*	PromiseRepeat(
+							() =>*/
+					this.consul.agent.service.register(this.serviceDefinition).then(fullfilled => {
+						this._stepRegisteredListener = step => {
+							this.updateTags();
+							this.update(5000);
+						};
 
-							this.owner.addListener('stepRegistered', this._stepRegisteredListener);
+						this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 
-							this.listener.koa.use(route.get(this.checkPath, ctx =>
-								this.hcs.endpoints.state.receive({}).then(r => {
-									this.status = r ? 200 : 300;
-									ctx.body = r ? 'OK' : 'ERROR';
-								})
-							));
+						this.listener.koa.use(route.get(this.checkPath, ctx =>
+							this.hcs.endpoints.state.receive({}).then(r => {
+								this.status = r ? 200 : 300;
+								ctx.body = r ? 'OK' : 'ERROR';
+							})
+						));
 
-							return Promise.resolve();
-						}), {
-							maxAttempts: 5,
-							minTimeout: 1000,
-							maxTimeout: this.startTimeout * 1000,
-							throttle: 1000
-						})
-				)
+						return Promise.resolve();
+					}), {
+						maxAttempts: 5,
+						minTimeout: 1000,
+						maxTimeout: this.startTimeout * 1000,
+						throttle: 1000
+					})
+				//	)
 			);
 		});
 	}
