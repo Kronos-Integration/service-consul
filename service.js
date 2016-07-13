@@ -11,10 +11,14 @@ const address = require('network-address'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
 
-function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
+function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 	let watch;
 
-	options.willBeClosed = function () {
+	const options = {
+		createOpposite: true
+	};
+
+	options.willBeClosed = () => {
 		owner.trace({
 			endpoint: this.identifier,
 			state: 'close'
@@ -26,21 +30,36 @@ function createWatchSendEndpoint(makeWatch, name, owner, options = {}) {
 		}
 	};
 
-	options.hasBeenOpened = function () {
+	options.hasBeenOpened = () => {
 		owner.trace({
 			endpoint: this.identifier,
 			state: 'open'
 		});
 
 		watch = makeWatch();
-		watch.on('change', (data, res) => this.receive(data));
+		watch.on('change', (data, res) => this.opposite.receive(data));
 		watch.on('error', err => owner.error({
 			error: err,
 			endpoint: this.identifier
 		}));
 	};
 
-	return new endpoint.SendEndpoint(name, owner, options);
+	const ep = new endpoint.ReceiveEndpoint(name, owner, options);
+
+	ep.receive = request => {
+		if (request) {
+			if (request.update && watch === undefined) {
+
+			} else if (request.update === false && watch) {
+				watch.end();
+				watch = undefined;
+			}
+		}
+
+		return dataProvider();
+	};
+
+	return ep;
 }
 
 class ServiceConsul extends service.Service {
@@ -107,13 +126,18 @@ class ServiceConsul extends service.Service {
 
 		this.addEndpoint(nodesEndpoint);
 
-		this.addEndpoint(createWatchSendEndpoint(() => this.consul.watch({
+		this.addEndpoint(createWatchEndpoint('kv', this, () => this.consul.watch({
 			method: this.consul.kv.get,
 			options: {
 				key: 'kronos',
 				recurse: true
 			}
-		}), 'kv', this));
+		}), () => this.consul.kv.get('kronos').then(r => {
+			return {
+				key: r.Key,
+				value: r.Value
+			};
+		})));
 	}
 
 	get configurationAttributes() {

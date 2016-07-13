@@ -33,12 +33,17 @@ describe('consul service', function () {
           assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
 
-          const kv = new endpoint.ReceiveEndpoint('kv', {});
-          kv.receive = data => {
+          const kv = new endpoint.SendEndpoint('kv', {}, {
+            createOpposite: true
+          });
+
+          kv.opposite.receive = data => {
             console.log(`kv.receive: ${data ? data[0].Value : 'null'}`);
           };
           cs.endpoints.kv.connected = kv;
-
+          kv.receive({
+            update: true
+          });
           let i = 0;
 
           setInterval(() => {
