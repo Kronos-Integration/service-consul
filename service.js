@@ -126,13 +126,15 @@ class ServiceConsul extends service.Service {
 
 		this.addEndpoint(nodesEndpoint);
 
+		const options = {
+			key: 'kronos',
+			recurse: true
+		};
+
 		this.addEndpoint(createWatchEndpoint('kv', this, () => this.consul.watch({
 			method: this.consul.kv.get,
-			options: {
-				key: 'kronos',
-				recurse: true
-			}
-		}), () => this.consul.kv.get('kronos').then(r => {
+			options: options
+		}), () => this.consul.kv.get(options).then(r => {
 			return {
 				key: r.Key,
 				value: r.Value
