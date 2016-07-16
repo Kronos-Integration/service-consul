@@ -113,7 +113,10 @@ class ServiceConsul extends service.Service {
 						}
 					});
 
-					watch.on('change', (data, res) => nodesEndpoint.opposite.receive(data));
+					watch.on('change', (data, res) => {
+						console.log(data);
+						return nodesEndpoint.opposite.receive(data);
+					});
 					watch.on('error', err => svc.error(err));
 				} else if (request.update === false && watch) {
 					watch.end();
@@ -127,7 +130,7 @@ class ServiceConsul extends service.Service {
 		this.addEndpoint(nodesEndpoint);
 
 		const options = {
-			key: 'kronos',
+			key: '',
 			recurse: true
 		};
 
@@ -135,10 +138,10 @@ class ServiceConsul extends service.Service {
 			method: this.consul.kv.get,
 			options: options
 		}), () => this.consul.kv.get(options).then(r => {
-			return {
-				key: r.Key,
-				value: r.Value
-			};
+			const dict = {};
+			r[0].forEach(e => dict[e.Key] = e.Value);
+			//console.log(dict);
+			return dict;
 		})));
 	}
 
