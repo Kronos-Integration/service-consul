@@ -226,7 +226,12 @@ class ServiceConsul extends service.Service {
 		delete this.consulOptions.baseUrl;
 
 		// TODO repeat here ?
-		this.consul = require('consul')(this.consulOptions);
+		try {
+			this.consul = require('consul')(this.consulOptions);
+		} catch (e) {
+			this.error(`Unable to create consul connection ${e}`);
+		}
+
 		return modified;
 	}
 
