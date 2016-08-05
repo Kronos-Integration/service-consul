@@ -273,6 +273,8 @@ class ServiceConsul extends service.Service {
 	 * @return {Promise} that fullfills on succesfull startup
 	 */
 	_start() {
+		const cs = this;
+
 		return super._start().then(() => {
 			this.updateTags();
 			// wait until health-check and koa services are present
@@ -310,7 +312,15 @@ class ServiceConsul extends service.Service {
 								maxAttempts: 5,
 								minTimeout: 1000,
 								maxTimeout: this.startTimeout * 1000,
-								throttle: 1000
+								throttle: 1000,
+								boolRetryFn(e, options) {
+									cs.info({
+										message: 'retry start after',
+										error: e,
+										options: options
+									});
+									return true;
+								}
 							})
 					));
 		});
