@@ -262,7 +262,7 @@ class ServiceConsul extends service.Service {
 
 	timeoutForTransition(transition) {
 		if (transition.name === 'start') {
-			return this.startTimeout * 1000; // 600000;
+			return this.startTimeout * 1000;
 		}
 
 		return super.timeoutForTransition(transition);
@@ -309,8 +309,8 @@ class ServiceConsul extends service.Service {
 
 								return Promise.resolve();
 							}), {
-								maxAttempts: 5,
-								minTimeout: 1000,
+								maxAttempts: 10,
+								minTimeout: 5000,
 								maxTimeout: this.startTimeout * 1000,
 								throttle: 1000,
 								boolRetryFn(e, options) {
