@@ -316,8 +316,7 @@ class ServiceConsul extends service.Service {
 								boolRetryFn(e, options) {
 									cs.info({
 										message: 'retry start after',
-										error: e,
-										options: options
+										error: e
 									});
 									return true;
 								}
