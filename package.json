@@ -29,7 +29,7 @@
     "istanbul": "0.4.4",
     "jsdoc": "3.4.0",
     "kronos-service-health-check": "^2.9.16",
-    "kronos-service-koa": "^2.17.14",
+    "kronos-service-koa": "^3.0.0",
     "kronos-service-manager": "^3.4.12",
     "mocha": "3.0.2",
     "semantic-release": "6.3.0"
