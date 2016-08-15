@@ -220,12 +220,7 @@ class ServiceConsul extends service.Service {
 			};
 		}
 
-		const modified = super._configure(config);
-
-		// TODO where does baseUrl come from ?
-		delete this.consulOptions.baseUrl;
-
-		return modified;
+		return super._configure(config);
 	}
 
 	get consul() {
