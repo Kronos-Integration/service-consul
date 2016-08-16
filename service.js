@@ -10,7 +10,6 @@ const address = require('network-address'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
 
-
 function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 	let watch;
 
@@ -272,6 +271,7 @@ class ServiceConsul extends service.Service {
 
 		return super._start().then(() => {
 			this.updateTags();
+
 			// wait until health-check and koa services are present
 			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
 					listener: {
@@ -296,27 +296,32 @@ class ServiceConsul extends service.Service {
 								this.owner.addListener('stepRegistered', this._stepRegisteredListener);
 
 								this.listener.koa.use(route.get(this.checkPath, ctx =>
-									this.hcs.endpoints.state.receive({}).then(r => {
-										this.status = r ? 200 : 300;
-										ctx.body = r ? 'OK' : 'ERROR';
-									})
+									this.hcs.endpoints.state.receive({}).then(isHealthy => [this.status, ctx.body] = isHealthy ? [200, 'OK'] : [
+										300,
+										'ERROR'
+									])
 								));
 
 								return Promise.resolve();
 							}), {
-								maxAttempts: 10,
-								minTimeout: 5000,
-								maxTimeout: this.startTimeout * 1000,
-								throttle: 1000,
+								maxAttempts: 5,
+								minTimeout: 2000,
+								maxTimeout: cs.startTimeout * 1000,
+								throttle: 2000,
 								boolRetryFn(e, options) {
 									cs.info({
-										message: 'retry start after',
+										message: 'retry start',
 										error: e
 									});
+									/*if (e.errno === 'ECONNREFUSED') {
+										return true;
+									}*/
+
 									return true;
 								}
-							})
-					));
+							})()
+					)
+				);
 		});
 	}
 
