@@ -142,6 +142,16 @@ class ServiceConsul extends service.Service {
 			//console.log(dict);
 			return dict;
 		})));
+
+
+
+		this.addEndpoint(createWatchEndpoint('checks', this, () => this.consul.watch({
+			method: this.consul.health.checks,
+			options: options
+		}), () => this.consul.health.checks(options).then(r => {
+			console.log(r);
+			return r;
+		})));
 	}
 
 	get configurationAttributes() {
