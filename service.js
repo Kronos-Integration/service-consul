@@ -6,6 +6,7 @@ const address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
 	PromiseRepeat = require('promise-repeat'),
+	mat = require('model-attributes'),
 	endpoint = require('kronos-endpoint'),
 	service = require('kronos-service'),
 	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
@@ -64,10 +65,6 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 class ServiceConsul extends service.Service {
 	static get name() {
 		return 'consul';
-	}
-
-	get type() {
-		return ServiceConsul.name;
 	}
 
 	get autostart() {
@@ -144,7 +141,6 @@ class ServiceConsul extends service.Service {
 		})));
 
 
-
 		this.addEndpoint(createWatchEndpoint('checks', this, () => this.consul.watch({
 			method: this.consul.health.checks,
 			options: options
@@ -159,11 +155,12 @@ class ServiceConsul extends service.Service {
 
 		function consulOptionSetter(value, attribute) {
 			if (value !== undefined) {
+				console.log(`set ${JSON.stringify(attribute)} ${value}`);
 				co[attribute.name] = value;
 			}
 		}
 
-		return Object.assign({
+		return Object.assign(mat.createAttributes({
 			host: {
 				description: 'consul host',
 				default: 'localhost',
@@ -204,8 +201,7 @@ class ServiceConsul extends service.Service {
 				default: 600,
 				type: 'duration'
 			}
-
-		}, super.configurationAttributes);
+		}), service.Service.configurationAttributes);
 	}
 
 	_configure(config) {
@@ -234,6 +230,8 @@ class ServiceConsul extends service.Service {
 
 	get consul() {
 		if (!this._consul) {
+			console.log(this.consulOptions);
+
 			this._consul = require('consul')(this.consulOptions);
 		}
 

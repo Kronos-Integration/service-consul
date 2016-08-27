@@ -28,16 +28,17 @@
     "cz-conventional-changelog": "1.2.0",
     "istanbul": "0.4.5",
     "jsdoc": "3.4.0",
-    "kronos-service-health-check": "^2.9.17",
-    "kronos-service-koa": "^3.0.1",
-    "kronos-service-manager": "^3.4.14",
+    "kronos-service-health-check": "^2.9.18",
+    "kronos-service-koa": "^3.0.2",
+    "kronos-service-manager": "^3.4.15",
     "mocha": "3.0.2",
     "semantic-release": "6.3.0"
   },
   "dependencies": {
     "consul": "0.25.0",
-    "koa-route": "3.1.0",
+    "koa-route": "^3.2.0",
     "kronos-service": "^4.0.0",
+    "model-attributes": "^1.2.0",
     "network-address": "1.1.0",
     "promise-repeat": "^0.4.0"
   },

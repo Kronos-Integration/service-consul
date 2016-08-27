@@ -11,15 +11,13 @@ const chai = require('chai'),
   endpoint = require('kronos-endpoint'),
   ServiceConsul = require('../service.js');
 
-
 describe('consul service', function () {
   this.timeout(30000);
   it('create', () =>
     ksm.manager([{
       id: 'myId'
     }, {
-      logLevel: 'trace',
-      name: 'consul',
+      name: 'registry',
       checkInterval: 100
     }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
