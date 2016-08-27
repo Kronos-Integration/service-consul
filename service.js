@@ -155,7 +155,6 @@ class ServiceConsul extends service.Service {
 
 		function consulOptionSetter(value, attribute) {
 			if (value !== undefined) {
-				console.log(`set ${JSON.stringify(attribute)} ${value}`);
 				co[attribute.name] = value;
 			}
 		}
@@ -230,8 +229,6 @@ class ServiceConsul extends service.Service {
 
 	get consul() {
 		if (!this._consul) {
-			console.log(this.consulOptions);
-
 			this._consul = require('consul')(this.consulOptions);
 		}
 
