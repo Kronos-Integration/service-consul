@@ -47,7 +47,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=6.1"
+    "node": ">=6.4"
   },
   "config": {
     "commitizen": {
