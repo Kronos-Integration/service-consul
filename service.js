@@ -260,7 +260,7 @@ class ServiceConsul extends service.Service {
 	}
 
 	timeoutForTransition(transition) {
-		if (transition.name === 'start') {
+		if (transition.name.startsWith('start')) {
 			return this.startTimeout * 1000;
 		}
 
