@@ -163,13 +163,13 @@ class ServiceConsul extends service.Service {
 			host: {
 				description: 'consul host',
 				default: 'localhost',
-				type: 'string',
+				type: 'hostname',
 				setter: consulOptionSetter
 			},
 			port: {
 				description: 'consul port',
 				default: 8500,
-				type: 'integer',
+				type: 'ip-port',
 				setter: consulOptionSetter
 			},
 			secure: {
@@ -178,7 +178,8 @@ class ServiceConsul extends service.Service {
 				setter: consulOptionSetter
 			},
 			ca: {
-				setter: consulOptionSetter
+				setter: consulOptionSetter,
+				type: 'blob'
 			},
 			checkPath: {
 				description: 'url path used for the kronos check',
@@ -310,7 +311,7 @@ class ServiceConsul extends service.Service {
 								return Promise.resolve();
 							}), {
 								maxAttempts: 5,
-								minTimeout: 2000,
+								minTimeout: cs.startTimeout * 1000,
 								maxTimeout: cs.startTimeout * 1000,
 								throttle: 2000,
 								boolRetryFn(e, options) {
@@ -332,7 +333,7 @@ class ServiceConsul extends service.Service {
 
 
 	/**
-	 * deregister the service from consul
+	 * Deregister the service from consul
 	 * @return {Promise} that fullfills when the deregitering has finished
 	 */
 	_stop() {
