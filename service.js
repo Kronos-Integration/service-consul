@@ -311,7 +311,7 @@ class ServiceConsul extends service.Service {
 								return Promise.resolve();
 							}), {
 								maxAttempts: 5,
-								minTimeout: cs.startTimeout * 1000,
+								minTimeout: cs.startTimeout * 100,
 								maxTimeout: cs.startTimeout * 1000,
 								throttle: 2000,
 								boolRetryFn(e, options) {

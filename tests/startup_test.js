@@ -11,17 +11,25 @@ const chai = require('chai'),
   ServiceConsul = require('../service.js');
 
 describe('consul service', function () {
-  this.timeout(100000);
+  this.timeout(200000);
   it('create', () =>
     ksm.manager([{}, {
       name: 'registry',
       port: 12345
-    },{name:'koa',listen:{ port: 9896 }}], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
+    }, {
+      name: 'koa',
+      listen: {
+        port: 9896
+      }
+    }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
         const cs = manager.services.registry;
 
         return cs.start().then(f => {
-          assert.equal(cs.state, 'running');
+          // should fail
+          assert.equal(cs.state, 'failed');
+        }, r => {
+          assert.equal(cs.state, 'failed');
         });
       })
   );
