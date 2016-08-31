@@ -17,7 +17,7 @@ describe('consul service', function () {
       name: 'registry',
       port: 12345
     }, {
-      name: 'koa',
+      name: 'koa-admin',
       listen: {
         port: 9896
       }
