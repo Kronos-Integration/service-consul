@@ -27,7 +27,7 @@
     "chai": "3.5.0",
     "cz-conventional-changelog": "1.2.0",
     "istanbul": "0.4.5",
-    "jsdoc": "3.4.0",
+    "jsdoc": "3.4.1",
     "kronos-service-health-check": "^2.9.19",
     "kronos-service-koa": "^3.0.4",
     "kronos-service-manager": "^3.4.15",
