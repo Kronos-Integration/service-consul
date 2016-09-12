@@ -159,7 +159,7 @@ class ServiceConsul extends service.Service {
 			}
 		}
 
-		return Object.assign(mat.createAttributes({
+		return mat.mergeAttributes(mat.createAttributes({
 			host: {
 				description: 'consul host',
 				default: 'localhost',
@@ -194,11 +194,6 @@ class ServiceConsul extends service.Service {
 			checkTimeout: {
 				description: 'timeout for the kronos check interval',
 				default: 5,
-				type: 'duration'
-			},
-			startTimeout: {
-				description: 'timeout for the service startup',
-				default: 600,
 				type: 'duration'
 			}
 		}), service.Service.configurationAttributes);
@@ -260,14 +255,6 @@ class ServiceConsul extends service.Service {
 		this.tags = Object.keys(this.owner.steps).map(name => `step:${name}`);
 	}
 
-	timeoutForTransition(transition) {
-		if (transition.name.startsWith('start')) {
-			return this.startTimeout * 1000;
-		}
-
-		return super.timeoutForTransition(transition);
-	}
-
 	/**
 	 * Register the kronos service in consul
 	 * @return {Promise} that fullfills on succesfull startup
@@ -311,8 +298,8 @@ class ServiceConsul extends service.Service {
 								return Promise.resolve();
 							}), {
 								maxAttempts: 5,
-								minTimeout: cs.startTimeout * 100,
-								maxTimeout: cs.startTimeout * 1000,
+								minTimeout: cs.timeout.start * 100,
+								maxTimeout: cs.timeout.start * 1000,
 								throttle: 2000,
 								boolRetryFn(e, options) {
 									cs.info({
