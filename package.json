@@ -35,7 +35,7 @@
     "semantic-release": "6.3.1"
   },
   "dependencies": {
-    "consul": "0.26.0",
+    "consul": "0.27.0",
     "koa-route": "^3.2.0",
     "kronos-service": "^4.1.6",
     "model-attributes": "^2.2.2",
