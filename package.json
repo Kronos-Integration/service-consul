@@ -32,7 +32,7 @@
     "kronos-service-koa": "^3.0.7",
     "kronos-service-manager": "^3.4.20",
     "mocha": "3.1.2",
-    "semantic-release": "6.3.1"
+    "semantic-release": "6.3.2"
   },
   "dependencies": {
     "consul": "0.27.0",
