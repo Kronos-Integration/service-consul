@@ -38,7 +38,7 @@
     "consul": "0.27.0",
     "koa-route": "^3.2.0",
     "kronos-service": "^4.1.6",
-    "model-attributes": "^2.2.16",
+    "model-attributes": "^3.0.0",
     "network-address": "1.1.0",
     "promise-repeat": "^0.4.0"
   },
