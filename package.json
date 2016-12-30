@@ -2,37 +2,38 @@
   "name": "kronos-service-consul",
   "version": "0.0.0-semantic-release",
   "description": "kronos service to integrate with consul",
-  "main": "service.js",
+  "main": "dist/module.js",
+  "module": "src/ServiceConsul.js",
   "keywords": [
     "kronos-service"
   ],
   "scripts": {
-    "cover": "./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests/*_test.js",
-    "test": "./node_modules/.bin/mocha tests/*_test.js",
+    "cover": "npm run build && node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -u exports tests/*_test.js",
+    "test": "npm run build && node_modules/.bin/mocha tests/*_test.js && markdown-doctest",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "doc": "./node_modules/.bin/jsdoc lib/*.js"
+    "build": "node_modules/rollup/bin/rollup --output=dist/module.js -c -- src/ServiceConsul.js",
+    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js > README.md"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
+  "contributors": [{
+    "name": "Torsten Link",
+    "email": "torstenlink@gmx.de"
+  }, {
+    "name": "Markus Felten",
+    "email": "markus.felten@gmx.de"
+  }],
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "3.5.0",
-    "cz-conventional-changelog": "1.2.0",
-    "istanbul": "0.4.5",
-    "jsdoc": "3.4.3",
+    "chai": "^3.5.0",
+    "cz-conventional-changelog": "^1.2.0",
+    "istanbul": "^0.4.5",
     "kronos-service-health-check": "^2.9.20",
     "kronos-service-koa": "^3.0.7",
     "kronos-service-manager": "^3.4.20",
-    "mocha": "3.2.0",
-    "semantic-release": "6.3.2"
+    "mocha": "^3.2.0",
+    "semantic-release": "^6.3.5",
+    "jsdoc-to-markdown": "^2.0.1",
+    "markdown-doctest": "^0.9.1",
+    "rollup": "^0.39.0"
   },
   "dependencies": {
     "consul": "0.27.0",
@@ -47,7 +48,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=6.9.1"
+    "node": ">=6.9.2"
   },
   "config": {
     "commitizen": {

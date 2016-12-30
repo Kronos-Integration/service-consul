@@ -7,19 +7,25 @@ const chai = require('chai'),
   assert = chai.assert,
   expect = chai.expect,
   should = chai.should(),
-  ksm = require('kronos-service-manager'),
-  endpoint = require('kronos-endpoint'),
-  ServiceConsul = require('../service.js');
+  {
+    manager
+  } = require('kronos-service-manager'),
+  {
+    SendEndpoint
+  } = require('kronos-endpoint'),
+  {
+    ServiceConsul
+  } = require('../dist/module.js');
 
 describe('consul service', function () {
   this.timeout(30000);
   it('create', () =>
-    ksm.manager([{
+    manager([{
       id: 'myId'
     }, {
       name: 'registry',
       checkInterval: 100
-    }], [ServiceConsul, require('kronos-service-health-check'), require('kronos-service-koa')]).then(
+    }], [require('../dist/module.js'), require('kronos-service-health-check'), require('kronos-service-koa')]).then(
       manager => {
         const cs = manager.services.registry;
 
@@ -30,7 +36,7 @@ describe('consul service', function () {
           assert.equal(cs.state, 'running');
           assert.deepEqual(cs.tags, []);
 
-          const kv = new endpoint.SendEndpoint('kv', {}, {
+          const kv = new SendEndpoint('kv', {}, {
             createOpposite: true
           });
 
@@ -48,7 +54,7 @@ describe('consul service', function () {
             i = i + 1;
           }, 2000);
 
-          const te = new endpoint.SendEndpoint('test', {}, {
+          const te = new SendEndpoint('test', {}, {
             createOpposite: true
           });
 
