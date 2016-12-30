@@ -5,11 +5,21 @@
 const address = require('network-address'),
 	url = require('url'),
 	route = require('koa-route'),
-	PromiseRepeat = require('promise-repeat'),
-	mat = require('model-attributes'),
-	endpoint = require('kronos-endpoint'),
-	service = require('kronos-service'),
-	ServiceConsumerMixin = require('kronos-service').ServiceConsumerMixin;
+	PromiseRepeat = require('promise-repeat');
+
+
+import {
+	mergeAttributes, createAttributes
+}
+from 'model-attributes';
+import {
+	ReceiveEndpoint
+}
+from 'kronos-endpoint';
+import {
+	Service, defineServiceConsumerProperties
+}
+from 'kronos-service';
 
 function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 	let watch;
@@ -44,7 +54,7 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 		}));
 	};
 
-	const ep = new endpoint.ReceiveEndpoint(name, owner, options);
+	const ep = new ReceiveEndpoint(name, owner, options);
 
 	ep.receive = request => {
 		if (request) {
@@ -62,7 +72,7 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 	return ep;
 }
 
-class ServiceConsul extends service.Service {
+class ServiceConsul extends Service {
 	static get name() {
 		return 'consul';
 	}
@@ -78,7 +88,7 @@ class ServiceConsul extends service.Service {
 
 		let watch;
 
-		const nodesEndpoint = new endpoint.ReceiveEndpoint('nodes', this, {
+		const nodesEndpoint = new ReceiveEndpoint('nodes', this, {
 			createOpposite: true,
 			willBeClosed() {
 				this.trace({
@@ -159,7 +169,7 @@ class ServiceConsul extends service.Service {
 			}
 		}
 
-		return mat.mergeAttributes(mat.createAttributes({
+		return mergeAttributes(createAttributes({
 			host: {
 				description: 'consul host',
 				default: 'localhost',
@@ -196,7 +206,7 @@ class ServiceConsul extends service.Service {
 				default: 5,
 				type: 'duration'
 			}
-		}), service.Service.configurationAttributes);
+		}), Service.configurationAttributes);
 	}
 
 	_configure(config) {
@@ -266,7 +276,7 @@ class ServiceConsul extends service.Service {
 			this.updateTags();
 
 			// wait until health-check and koa services are present
-			return ServiceConsumerMixin.defineServiceConsumerProperties(this, {
+			return defineServiceConsumerProperties(this, {
 					listener: {
 						name: 'koa-admin',
 						type: 'koa'
@@ -449,9 +459,15 @@ class ServiceConsul extends service.Service {
 	}
 }
 
-module.exports.registerWithManager = manager =>
-	manager.registerServiceFactory(ServiceConsul).then(sf =>
+function registerWithManager(manager) {
+	return manager.registerServiceFactory(ServiceConsul).then(sf =>
 		manager.declareService({
 			type: sf.name,
 			name: 'registry'
 		}));
+}
+
+export {
+	ServiceConsul,
+	registerWithManager
+};
