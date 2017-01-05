@@ -34,7 +34,7 @@
     "jsdoc-to-markdown": "^2.0.1",
     "kronos-service-health-check": "^2.10.2",
     "kronos-service-koa": "^3.0.7",
-    "kronos-service-manager": "^3.4.20",
+    "kronos-service-manager": "^3.5.5",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
     "rollup": "^0.40.0",
