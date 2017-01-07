@@ -11,7 +11,7 @@
     "cover": "npm run prepublish && istanbul cover node_modules/.bin/_mocha -- -u exports tests/*_test.js",
     "test": "mocha tests/*_test.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js > README.md",
+    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "prepublish": "rollup --output=dist/module.js -c -- src/ServiceConsul.js",
     "pretest": "npm run prepublish",
     "posttest": "markdown-doctest"
@@ -37,7 +37,7 @@
     "kronos-service-manager": "^3.5.5",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
-    "rollup": "^0.41.0",
+    "rollup": "^0.41.1",
     "semantic-release": "^6.3.5"
   },
   "dependencies": {
@@ -53,7 +53,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=6.9.2"
+    "node": ">=6.9.3"
   },
   "config": {
     "commitizen": {
