@@ -32,9 +32,9 @@
     "cz-conventional-changelog": "^1.2.0",
     "istanbul": "^0.4.5",
     "jsdoc-to-markdown": "^2.0.1",
-    "kronos-service-health-check": "^2.10.2",
-    "kronos-service-koa": "^3.0.7",
-    "kronos-service-manager": "^3.4.20",
+    "kronos-service-health-check": "^2.10.3",
+    "kronos-service-koa": "^3.3.1",
+    "kronos-service-manager": "^3.5.5",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
     "rollup": "^0.41.0",
@@ -43,8 +43,8 @@
   "dependencies": {
     "consul": "0.27.0",
     "koa-route": "^3.2.0",
-    "kronos-service": "^4.3.1",
-    "model-attributes": "^3.0.1",
+    "kronos-service": "^4.5.1",
+    "model-attributes": "^3.0.3",
     "network-address": "1.1.0",
     "promise-repeat": "^0.4.0"
   },
