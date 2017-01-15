@@ -44,7 +44,7 @@
   "dependencies": {
     "consul": "0.27.0",
     "koa-route": "^3.2.0",
-    "kronos-service": "^4.5.1",
+    "kronos-service": "^4.5.3",
     "model-attributes": "^3.0.4",
     "network-address": "1.1.0",
     "promise-repeat": "^0.4.0"
