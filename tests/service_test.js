@@ -89,7 +89,7 @@ describe('consul service', function () {
 
             setTimeout(() => {
                 cs.unregisterService('myService').then(() => {
-                  assert.ok("unregistered");
+                  assert.ok('unregistered');
 
                   const us = cs.serviceURLs('myService');
                   console.log(`after: ${JSON.stringify(us.next())}`);
