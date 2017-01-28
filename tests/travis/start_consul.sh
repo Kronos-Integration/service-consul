@@ -3,16 +3,26 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 
-pwd
-
 NAME=consul
 VERSION=0.7.3
-ARCHIVE_NAME=${NAME}_${VERSION}_linux_amd64.zip
+
+case $(uname) in
+  Darwin )
+    ARCH=darwin_amd64
+    ;;
+  Linux )
+    ARCH=linux_amd64
+    ;;
+esac
+
+ARCHIVE_NAME=${NAME}_${VERSION}_${ARCH}.zip
+URL=https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
+echo ${URL}
 
 if [ ! -f ${NAME} ]; then
   if [ ! -f ${ARCHIVE_NAME} ]; then
-    rm ${ARCHIVE_NAME}
-    curl -O -insecure https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
+    #rm ${ARCHIVE_NAME}
+    curl -O -insecure ${URL}
   fi
 
   rm ${NAME}
