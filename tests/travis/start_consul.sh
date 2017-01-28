@@ -19,13 +19,11 @@ ARCHIVE_NAME=${NAME}_${VERSION}_${ARCH}.zip
 URL=https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
 echo ${URL}
 
-rm ${NAME}
-rm ${ARCHIVE_NAME}
-rm nohup.out
-ls -l
+rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
 
 curl -O -insecure ${URL}
 unzip -o ${ARCHIVE_NAME}
+ls -l
 
 ./consul version
 
