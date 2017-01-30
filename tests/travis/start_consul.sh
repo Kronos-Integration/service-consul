@@ -21,7 +21,7 @@ echo ${URL}
 
 rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
 
-curl -O -insecure ${URL}
+curl -O ${URL}
 echo 'curl rc: ' $?
 unzip -o ${ARCHIVE_NAME}
 ls -l
