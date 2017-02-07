@@ -18,12 +18,10 @@ esac
 ARCHIVE_NAME=${NAME}_${VERSION}_${ARCH}.zip
 URL=https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
 echo ${URL}
-nslookup releases.hashicorp.com
-ping -c 5 releases.hashicorp.com
 
 rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
 
-curl -O ${URL}
+curl --noproxy releases.hashicorp.com -O ${URL}
 echo 'curl rc: ' $?
 unzip -o ${ARCHIVE_NAME}
 ls -l
