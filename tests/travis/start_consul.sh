@@ -21,6 +21,7 @@ echo ${URL}
 
 rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
 
+curl --version
 curl --noproxy releases.hashicorp.com -O ${URL}
 echo 'curl rc: ' $?
 unzip -o ${ARCHIVE_NAME}
