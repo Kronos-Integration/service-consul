@@ -30,7 +30,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "chai": "^3.5.0",
-    "cz-conventional-changelog": "^1.2.0",
+    "cz-conventional-changelog": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.6",
     "kronos-service-koa": "^3.3.4",
