@@ -33,19 +33,19 @@
     "cz-conventional-changelog": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.8",
-    "kronos-service-koa": "^3.3.5",
+    "kronos-service-koa": "^3.3.7",
     "kronos-service-manager": "^3.5.8",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
-    "rollup": "^0.41.4",
+    "rollup": "^0.41.5",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
     "consul": "0.28.0",
     "koa-route": "^3.2.0",
     "kronos-service": "^4.5.4",
-    "model-attributes": "^3.0.7",
+    "model-attributes": "^3.0.8",
     "network-address": "1.1.2",
     "promise-repeat": "^0.4.0"
   },
