@@ -37,8 +37,8 @@
     "kronos-service-manager": "^3.5.8",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.2.0",
-    "nyc": "^10.1.2",
-    "rollup": "^0.41.5",
+    "nyc": "^10.2.0",
+    "rollup": "^0.41.6",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
@@ -54,7 +54,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=7.7.2"
+    "node": ">=7.9.0"
   },
   "config": {
     "commitizen": {
@@ -73,5 +73,10 @@
       "lcov"
     ],
     "report-dir": "./coverage"
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/Kronos-Tools/npm-package-template.git"
+    }
   }
 }
