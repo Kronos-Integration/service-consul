@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 
 NAME=consul
-VERSION=0.7.4
+VERSION=0.8.3
 
 case $(uname) in
   Darwin )
