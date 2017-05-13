@@ -42,7 +42,7 @@
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
-    "consul": "0.28.0",
+    "consul": "0.29.0",
     "koa-route": "^3.2.0",
     "kronos-service": "^4.5.4",
     "model-attributes": "^3.0.8",
