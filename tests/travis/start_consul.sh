@@ -17,7 +17,7 @@ esac
 
 ARCHIVE_NAME=${NAME}_${VERSION}_${ARCH}.zip
 URL=https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
-URL=https://mfelten.de/${ARCHIVE_NAME}
+#URL=https://mfelten.de/${ARCHIVE_NAME}
 echo ${URL}
 
 rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
