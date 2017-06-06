@@ -38,7 +38,7 @@
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.4.2",
     "nyc": "^11.0.2",
-    "rollup": "^0.41.6",
+    "rollup": "^0.42.0",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
