@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
 
 NAME=consul
-VERSION=0.8.3
+VERSION=0.8.4
 
 case $(uname) in
   Darwin )
@@ -17,7 +17,6 @@ esac
 
 ARCHIVE_NAME=${NAME}_${VERSION}_${ARCH}.zip
 URL=https://releases.hashicorp.com/${NAME}/${VERSION}/${ARCHIVE_NAME}
-#URL=https://mfelten.de/${ARCHIVE_NAME}
 echo ${URL}
 
 rm -f ${NAME} ${ARCHIVE_NAME} nohup.out
