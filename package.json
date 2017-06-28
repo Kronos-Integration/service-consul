@@ -37,8 +37,8 @@
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.4.2",
-    "nyc": "^11.0.2",
-    "rollup": "^0.42.0",
+    "nyc": "^11.0.3",
+    "rollup": "^0.43.0",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
@@ -54,12 +54,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=7.10.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
+    "node": ">=8.1.2"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
