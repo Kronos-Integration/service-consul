@@ -30,7 +30,6 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "chai": "^4.0.2",
-    "cz-conventional-changelog": "^2.0.0",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.11",
     "kronos-service-koa": "^3.3.9",
@@ -54,7 +53,7 @@
     "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=8.1.2"
+    "node": ">=8.1.3"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
