@@ -29,7 +29,7 @@
   ],
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "^4.0.2",
+    "chai": "^4.1.0",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.11",
     "kronos-service-koa": "^3.3.9",
@@ -37,7 +37,7 @@
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
-    "rollup": "^0.45.1",
+    "rollup": "^0.45.2",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
