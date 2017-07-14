@@ -4,9 +4,7 @@
   "description": "kronos service to integrate with consul",
   "main": "dist/module.js",
   "module": "src/ServiceConsul.js",
-  "keywords": [
-    "kronos-service"
-  ],
+  "keywords": ["kronos-service"],
   "scripts": {
     "cover": "nyc npm test",
     "test": "mocha tests/*_test.js",
@@ -29,15 +27,15 @@
   ],
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "^4.0.2",
+    "chai": "^4.1.0",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.11",
-    "kronos-service-koa": "^3.3.9",
+    "kronos-service-koa": "^3.3.10",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
-    "rollup": "^0.43.0",
+    "rollup": "^0.45.2",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
@@ -45,7 +43,7 @@
     "koa-route": "^3.2.0",
     "kronos-service": "^4.5.6",
     "model-attributes": "^3.0.10",
-    "network-address": "1.1.2",
+    "network-address": "^1.1.2",
     "promise-repeat": "^0.4.0"
   },
   "repository": {
@@ -60,12 +58,8 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-consul#readme",
   "nyc": {
-    "include": [
-      "dist/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["dist/**/*.js"],
+    "reporter": ["lcov"],
     "report-dir": "./coverage"
   },
   "template": {
