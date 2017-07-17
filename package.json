@@ -4,7 +4,9 @@
   "description": "kronos service to integrate with consul",
   "main": "dist/module.js",
   "module": "src/ServiceConsul.js",
-  "keywords": ["kronos-service"],
+  "keywords": [
+    "kronos-service"
+  ],
   "scripts": {
     "cover": "nyc npm test",
     "test": "mocha tests/*_test.js",
@@ -58,8 +60,12 @@
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-consul#readme",
   "nyc": {
-    "include": ["dist/**/*.js"],
-    "reporter": ["lcov"],
+    "include": [
+      "dist/**/*.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
     "report-dir": "./coverage"
   },
   "template": {
