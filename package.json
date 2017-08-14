@@ -37,7 +37,7 @@
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.5.0",
     "nyc": "^11.1.0",
-    "rollup": "^0.47.0",
+    "rollup": "^0.47.4",
     "semantic-release": "^6.3.6"
   },
   "dependencies": {
@@ -50,10 +50,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
+    "url": "git+https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=8.2.1"
+    "node": ">=8.3.0"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
