@@ -32,7 +32,7 @@
     "chai": "^4.1.2",
     "jsdoc-to-markdown": "^3.0.0",
     "kronos-service-health-check": "^2.10.11",
-    "kronos-service-koa": "^3.3.10",
+    "kronos-service-koa": "^3.3.12",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
     "mocha": "^3.5.0",
