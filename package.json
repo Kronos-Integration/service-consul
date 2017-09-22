@@ -38,7 +38,7 @@
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",
     "rollup": "^0.50.0",
-    "semantic-release": "^8.0.0"
+    "semantic-release": "^8.0.3"
   },
   "dependencies": {
     "consul": "^0.29.0",
