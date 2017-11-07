@@ -10,7 +10,7 @@
   "scripts": {
     "cover": "nyc npm test",
     "test": "mocha tests/*-test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
     "pretest": "rollup -c",
     "posttest": "markdown-doctest",
@@ -30,15 +30,15 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "chai": "^4.1.2",
-    "jsdoc-to-markdown": "^3.0.0",
+    "jsdoc-to-markdown": "^3.0.1",
     "kronos-service-health-check": "^2.10.11",
     "kronos-service-koa": "^3.3.12",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.1",
     "nyc": "^11.3.0",
     "rollup": "^0.50.0",
-    "semantic-release": "^8.2.2"
+    "semantic-release": "^9.1.0"
   },
   "dependencies": {
     "consul": "^0.30.0",
@@ -53,7 +53,7 @@
     "url": "git+https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=8.8.1"
+    "node": ">=8.9.0"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
