@@ -35,7 +35,7 @@
     "kronos-service-koa": "^3.3.12",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
-    "mocha": "^4.0.1",
+    "mocha": "^3.5.3",
     "nyc": "^11.3.0",
     "rollup": "^0.50.0",
     "semantic-release": "^9.1.0"
