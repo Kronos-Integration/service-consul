@@ -2,19 +2,18 @@
   "name": "kronos-service-consul",
   "version": "0.0.0-semantic-release",
   "description": "kronos service to integrate with consul",
-  "main": "dist/module.js",
-  "module": "src/ServiceConsul.js",
-  "keywords": [
-    "kronos-service"
-  ],
+  "main": "dist/service-consul.js",
+  "module": "src/service-consul.js",
+  "keywords": ["kronos-service"],
   "scripts": {
-    "cover": "nyc --temp-directory build/nyc npm test",
-    "test": "mocha tests/*-test.js",
+    "cover": "nyc --temp-directory build/nyc ava",
+    "test": "ava",
     "semantic-release": "semantic-release",
-    "docs": "jsdoc2md -l off -t doc/README.hbs -f src/*.js >README.md",
-    "pretest": "rollup -c",
-    "posttest": "markdown-doctest",
-    "precover": "rollup -c",
+    "docs":
+      "jsdoc2md --configure doc/jsdoc.json -l off -t doc/README.hbs -f src/*.js >README.md",
+    "pretest": "rollup -c tests/rollup.config.js",
+    "posttest": "npm run prepare && markdown-doctest",
+    "precover": "rollup -c tests/rollup.config.js",
     "prepare": "rollup -c"
   },
   "contributors": [
@@ -29,16 +28,20 @@
   ],
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "jsdoc-to-markdown": "^3.0.1",
+    "jsdoc-to-markdown": "^3.0.2",
     "kronos-service-health-check": "^2.10.11",
     "kronos-service-koa": "^3.3.12",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
-    "mocha": "^3.5.3",
     "nyc": "^11.3.0",
     "rollup": "^0.51.5",
-    "semantic-release": "^9.1.1"
+    "semantic-release": "^9.1.1",
+    "jsdoc-babel": "^0.3.0",
+    "ava": "^0.23.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-multi-entry": "^2.0.2",
+    "babel-preset-env": "^1.6.1",
+    "xo": "^0.19.0"
   },
   "dependencies": {
     "consul": "^0.30.0",
@@ -58,22 +61,24 @@
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/kronos-service-consul#readme",
+  "homepage":
+    "https://github.com/Kronos-Integration/kronos-service-consul#readme",
   "nyc": {
-    "include": [
-      "dist/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
+    "include": ["dist/**/*.js"],
+    "reporter": ["lcov"],
     "report-dir": "./coverage"
   },
   "template": {
     "repository": {
-      "url": "https://github.com/Kronos-Tools/npm-package-template.git"
+      "url": "https://github.com/arlac77/npm-package-template.git"
     }
   },
   "xo": {
     "space": true
+  },
+  "ava": {
+    "files": ["build/*-test.js"],
+    "presets": ["env"],
+    "require": ["babel-register"]
   }
 }
