@@ -64,9 +64,9 @@
   "homepage":
     "https://github.com/Kronos-Integration/kronos-service-consul#readme",
   "nyc": {
-    "include": ["dist/**/*.js"],
+    "include": ["build/*-test.js", "src/**/*.js"],
     "reporter": ["lcov"],
-    "report-dir": "./coverage"
+    "report-dir": "./build/coverage"
   },
   "template": {
     "repository": {
