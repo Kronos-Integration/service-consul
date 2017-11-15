@@ -141,7 +141,10 @@ export class ServiceConsul extends Service {
           console.log(`*** ***`);
           console.log(r);
           const dict = {};
-          r[0].forEach(e => (dict[e.Key] = e.Value));
+          if (r[0] !== undefined) {
+            r[0].forEach(e => (dict[e.Key] = e.Value));
+          }
+
           //console.log(dict);
           return dict;
         }
