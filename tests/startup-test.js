@@ -1,40 +1,33 @@
-/* global describe, it*/
-/* jslint node: true, esnext: true */
+import { ServiceConsul, registerWithManager } from '../src/service-consul';
+import test from 'ava';
 
-'use strict';
+const { manager } = require('kronos-service-manager');
 
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  {
-    manager
-  } = require('kronos-service-manager'),
-  {
-    ServiceConsul
-  } = require('../dist/module.js');
-
-describe('consul service', function () {
-  this.timeout(200000);
-  it('create', () =>
-    manager([{}, {
-      name: 'registry',
-      port: 12345
-    }, {
-      name: 'koa-admin',
-      listen: {
-        port: 9896
+test('consul service fail to connect', async t => {
+  const m = await manager(
+    [
+      {},
+      {
+        name: 'registry',
+        port: 12345
+      },
+      {
+        name: 'koa-admin',
+        listen: {
+          port: 9896
+        }
       }
-    }], [require('../dist/module.js'), require('kronos-service-health-check'), require('kronos-service-koa')]).then(
-      manager => {
-        const cs = manager.services.registry;
-
-        return cs.start().then(f => {
-          // should fail
-          assert.equal(cs.state, 'failed');
-        }, r => {
-          assert.equal(cs.state, 'failed');
-        });
-      })
+    ],
+    [require('kronos-service-health-check'), require('kronos-service-koa')]
   );
+
+  await registerWithManager(m);
+
+  const cs = m.services.registry;
+
+  try {
+    await cs.start();
+  } catch (e) {
+    t.is(cs.state, 'failed');
+  }
 });

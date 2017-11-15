@@ -1,109 +1,117 @@
-/* global describe, it*/
-/* jslint node: true, esnext: true */
+import { ServiceConsul, registerWithManager } from '../src/service-consul';
+import { SendEndpoint } from 'kronos-endpoint';
+import test from 'ava';
 
-'use strict';
+const { manager } = require('kronos-service-manager');
 
-const chai = require('chai'),
-  assert = chai.assert,
-  expect = chai.expect,
-  should = chai.should(),
-  {
-    manager
-  } = require('kronos-service-manager'),
-  {
-    SendEndpoint
-  } = require('kronos-endpoint'),
-  {
-    ServiceConsul
-  } = require('../dist/module.js');
+test('consul service', async t => {
+  const m = await manager(
+    [
+      {
+        id: 'myId'
+      },
+      {
+        name: 'registry',
+        checkInterval: 100
+      }
+    ],
+    [require('kronos-service-health-check'), require('kronos-service-koa')]
+  );
 
-describe('consul service', function () {
-  this.timeout(30000);
-  it('create', () =>
-    manager([{
-      id: 'myId'
-    }, {
-      name: 'registry',
-      checkInterval: 100
-    }], [require('../dist/module.js'), require('kronos-service-health-check'), require('kronos-service-koa')]).then(
-      manager => {
-        const cs = manager.services.registry;
+  await registerWithManager(m);
 
-        assert.equal(cs.name, 'registry');
-        assert.equal(cs.type, 'consul');
+  const cs = m.services.registry;
 
-        return cs.start().then(f => {
-          assert.equal(cs.state, 'running');
-          assert.deepEqual(cs.tags, []);
+  t.is(cs.name, 'registry');
+  t.is(cs.type, 'consul');
 
-          const kv = new SendEndpoint('kv', {}, {
-            createOpposite: true
-          });
+  await cs.start();
 
-          kv.opposite.receive = data => {
-            console.log(`kv.receive: ${data ? data[0].Value : 'null'}`);
-          };
-          cs.endpoints.kv.connected = kv;
-          kv.receive({
-            update: true
-          });
-          let i = 0;
+  t.is(cs.state, 'running');
+  t.deepEqual(cs.tags, []);
 
-          setInterval(() => {
-            cs.consul.kv.set('kronos', '' + i);
-            i = i + 1;
-          }, 2000);
+  const kv = new SendEndpoint(
+    'kv',
+    {},
+    {
+      createOpposite: true
+    }
+  );
 
-          const te = new SendEndpoint('test', {}, {
-            createOpposite: true
-          });
+  kv.opposite.receive = data => {
+    console.log(`kv.receive: ${data ? data[0].Value : 'null'}`);
+  };
 
-          te.opposite.receive = request => {
-            console.log(`te.opposite.receive: ${JSON.stringify(request)}`);
-          };
+  cs.endpoints.kv.connected = kv;
+  kv.receive({
+    update: true
+  });
+  let i = 0;
 
-          te.connected = cs.endpoints.nodes;
-          te.receive({
-            update: true
-          }).then(r => {
-            console.log(r);
-            //assert.equal(r[0].ServiceName, 'kronos');
-            te.receive({
-              update: false
-            });
-          });
+  setInterval(() => {
+    cs.consul.kv.set('kronos', '' + i);
+    i = i + 1;
+  }, 2000);
 
-          cs.registerService('myService', {
-            url: cs.listener.url + '/somepath'
-          }).then(() => {
-            const us = cs.serviceURLs('myService');
+  const te = new SendEndpoint(
+    'test',
+    {},
+    {
+      createOpposite: true
+    }
+  );
 
-            us.next().value.then(u => assert.equal(u, cs.listener.url + '/somepath'));
+  te.opposite.receive = request => {
+    console.log(`te.opposite.receive: ${JSON.stringify(request)}`);
+  };
 
-            setInterval(() =>
-              us.next().value.then(u => {
-                assert.equal(u, cs.listener.url + '/somepath');
-                console.log(`myService: ${u}`);
-              }),
-              1000);
+  te.connected = cs.endpoints.nodes;
 
-            setTimeout(() => {
-                cs.unregisterService('myService').then(() => {
-                  assert.ok('unregistered');
+  te
+    .receive({
+      update: true
+    })
+    .then(r => {
+      console.log(r);
+      //assert.equal(r[0].ServiceName, 'kronos');
+      te.receive({
+        update: false
+      });
+    });
 
-                  const us = cs.serviceURLs('myService');
-                  console.log(`after: ${JSON.stringify(us.next())}`);
-                });
-              },
-              5000);
-          }).catch(console.log);
+  cs
+    .registerService('myService', {
+      url: cs.listener.url + '/somepath'
+    })
+    .then(() => {
+      const us = cs.serviceURLs('myService');
 
-          return new Promise((f, r) =>
-            setTimeout(() => {
-              cs.stop();
-              f();
-            }, 20000));
+      us.next().value.then(u => t.is(u, cs.listener.url + '/somepath'));
+
+      setInterval(
+        () =>
+          us.next().value.then(u => {
+            console.log(`myService: ${u}`);
+            t.is(u, cs.listener.url + '/somepath');
+          }),
+        1000
+      );
+
+      setTimeout(() => {
+        cs.unregisterService('myService').then(() => {
+          t.pass('unregistered');
+
+          const us = cs.serviceURLs('myService');
+          console.log(`after: ${JSON.stringify(us.next())}`);
         });
-      })
+      }, 5000);
+    })
+    .catch(console.log);
+
+  return new Promise((f, r) =>
+    setTimeout(() => {
+      cs.stop();
+      f();
+    }, 20000)
   );
 });
