@@ -136,13 +136,15 @@ export class ServiceConsul extends Service {
             method: this.consul.kv.get,
             options: options
           }),
-        () =>
-          this.consul.kv.get(options).then(r => {
-            const dict = {};
-            r[0].forEach(e => (dict[e.Key] = e.Value));
-            //console.log(dict);
-            return dict;
-          })
+        async () => {
+          const r = await this.consul.kv.get(options);
+          console.log(`*** ***`);
+          console.log(r);
+          const dict = {};
+          r[0].forEach(e => (dict[e.Key] = e.Value));
+          //console.log(dict);
+          return dict;
+        }
       )
     );
 
