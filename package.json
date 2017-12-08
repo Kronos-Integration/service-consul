@@ -56,7 +56,7 @@
     "url": "git+https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
   "engines": {
-    "node": ">=8.9.2"
+    "node": ">=8.9.3"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
