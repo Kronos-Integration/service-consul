@@ -59,6 +59,9 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
   return ep;
 }
 
+/**
+ * service building a bridge to consul
+ */
 export class ServiceConsul extends Service {
   static get name() {
     return 'consul';
@@ -380,7 +383,7 @@ export class ServiceConsul extends Service {
 
   /**
    * Update service definition in consul
-   * @param {Number} delay time to wait before doing the unregister/register action
+   * @param {number} delay time to wait before doing the unregister/register action
    */
   update(delay) {
     const reregister = () =>
