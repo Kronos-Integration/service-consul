@@ -17,8 +17,9 @@
 
 consul support for kronos
 =========================
-
 consul: - as a config provider - for service discovery
+
+# API
 
 install
 =======
