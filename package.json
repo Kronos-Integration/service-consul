@@ -1,23 +1,12 @@
 {
   "name": "kronos-service-consul",
   "version": "0.0.0-semantic-release",
-  "description": "kronos service to integrate with consul",
   "main": "dist/service-consul.js",
   "module": "src/service-consul.js",
+  "description": "kronos service to integrate with consul",
   "keywords": [
     "kronos-service"
   ],
-  "scripts": {
-    "cover": "nyc --temp-directory build/nyc ava",
-    "test": "ava",
-    "semantic-release": "semantic-release",
-    "docs": "documentation readme src/service-consul.js --section=API",
-    "pretest": "rollup -c tests/rollup.config.js",
-    "posttest": "npm run prepare && markdown-doctest",
-    "precover": "rollup -c tests/rollup.config.js",
-    "prepare": "rollup -c",
-    "lint": "documentation lint src/service-consul.js"
-  },
   "contributors": [
     {
       "name": "Torsten Link",
@@ -29,6 +18,25 @@
     }
   ],
   "license": "BSD-2-Clause",
+  "scripts": {
+    "cover": "nyc --temp-directory build/nyc ava",
+    "test": "ava",
+    "semantic-release": "semantic-release",
+    "docs": "documentation readme src/service-consul.js --section=API",
+    "pretest": "rollup -c tests/rollup.config.js",
+    "posttest": "npm run prepare && markdown-doctest",
+    "precover": "rollup -c tests/rollup.config.js",
+    "prepare": "rollup -c",
+    "lint": "documentation lint src/service-consul.js"
+  },
+  "dependencies": {
+    "consul": "^0.30.0",
+    "koa-route": "^3.2.0",
+    "kronos-service": "^4.13.1",
+    "model-attributes": "^3.0.10",
+    "network-address": "^1.1.2",
+    "promise-repeat": "^0.4.0"
+  },
   "devDependencies": {
     "kronos-service-health-check": "^2.10.11",
     "kronos-service-koa": "^3.3.14",
@@ -42,43 +50,17 @@
     "xo": "^0.19.0",
     "documentation": "^5.3.5"
   },
-  "dependencies": {
-    "consul": "^0.30.0",
-    "koa-route": "^3.2.0",
-    "kronos-service": "^4.13.1",
-    "model-attributes": "^3.0.10",
-    "network-address": "^1.1.2",
-    "promise-repeat": "^0.4.0"
+  "engines": {
+    "node": ">=8.9.3"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kronos-Integration/kronos-service-consul.git"
   },
-  "engines": {
-    "node": ">=8.9.3"
-  },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-service-consul#readme",
-  "nyc": {
-    "include": [
-      "build/*-test.js",
-      "src/**/*.js"
-    ],
-    "reporter": [
-      "lcov"
-    ],
-    "report-dir": "./build/coverage"
-  },
-  "template": {
-    "repository": {
-      "url": "https://github.com/arlac77/npm-package-template.git"
-    }
-  },
-  "xo": {
-    "space": true
-  },
   "ava": {
     "files": [
       "build/*-test.js"
@@ -89,5 +71,23 @@
     "require": [
       "babel-register"
     ]
+  },
+  "nyc": {
+    "include": [
+      "build/*-test.js",
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov"
+    ],
+    "report-dir": "./build/coverage"
+  },
+  "xo": {
+    "space": true
+  },
+  "template": {
+    "repository": {
+      "url": "https://github.com/arlac77/npm-package-template.git"
+    }
   }
 }
