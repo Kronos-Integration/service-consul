@@ -63,10 +63,17 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
  * service building a bridge to consul
  */
 export class ServiceConsul extends Service {
+  /**
+   * @return {string} 'consul'
+   */
   static get name() {
     return 'consul';
   }
 
+  /**
+   * Start immediate
+   * @return {boolean} true
+   */
   get autostart() {
     return true;
   }
@@ -286,99 +293,91 @@ export class ServiceConsul extends Service {
    * Register the kronos service in consul
    * @return {Promise} that fullfills on succesfull startup
    */
-  _start() {
+  async _start() {
+    await super._start();
+
     const cs = this;
 
-    return super._start().then(() => {
-      this.updateTags();
+    this.updateTags();
 
-      // wait until health-check and koa services are present
-      return defineServiceConsumerProperties(
-        this,
-        {
-          listener: {
-            name: 'koa-admin',
-            type: 'koa'
-          },
-          hcs: {
-            name: 'health-check',
-            type: 'health-check'
-          }
+    // wait until health-check and koa services are present
+    await defineServiceConsumerProperties(
+      this,
+      {
+        listener: {
+          name: 'koa-admin',
+          type: 'koa'
         },
-        this.owner,
-        true
-      ).then(() =>
-        this.listener.start().then(() =>
-          PromiseRepeat(
-            () =>
-              this.consul.agent.service
-                .register(this.serviceDefinition)
-                .then(fullfilled => {
-                  this._stepRegisteredListener = step => {
-                    this.updateTags();
-                    this.update(5000);
-                  };
+        hcs: {
+          name: 'health-check',
+          type: 'health-check'
+        }
+      },
+      this.owner,
+      true
+    );
+    await this.listener.start();
+    return PromiseRepeat(
+      () =>
+        this.consul.agent.service
+          .register(this.serviceDefinition)
+          .then(fullfilled => {
+            this._stepRegisteredListener = step => {
+              this.updateTags();
+              this.update(5000);
+            };
 
-                  this.owner.addListener(
-                    'stepRegistered',
-                    this._stepRegisteredListener
-                  );
+            this.owner.addListener(
+              'stepRegistered',
+              this._stepRegisteredListener
+            );
 
-                  this.listener.koa.use(
-                    route.get(this.checkPath, ctx =>
-                      this.hcs.endpoints.state
-                        .receive({})
-                        .then(
-                          isHealthy =>
-                            ([this.status, ctx.body] = isHealthy
-                              ? [200, 'OK']
-                              : [300, 'ERROR'])
-                        )
-                    )
-                  );
+            this.listener.koa.use(
+              route.get(this.checkPath, ctx =>
+                this.hcs.endpoints.state
+                  .receive({})
+                  .then(
+                    isHealthy =>
+                      ([this.status, ctx.body] = isHealthy
+                        ? [200, 'OK']
+                        : [300, 'ERROR'])
+                  )
+              )
+            );
 
-                  return Promise.resolve();
-                }),
-            {
-              maxAttempts: 5,
-              minTimeout: cs.timeout.start * 100,
-              maxTimeout: cs.timeout.start * 1000,
-              throttle: 2000,
-              boolRetryFn(e, options) {
-                cs.info({
-                  message: 'retry start',
-                  error: e
-                });
-                /*if (e.errno === 'ECONNREFUSED') {
+            return Promise.resolve();
+          }),
+      {
+        maxAttempts: 5,
+        minTimeout: cs.timeout.start * 100,
+        maxTimeout: cs.timeout.start * 1000,
+        throttle: 2000,
+        boolRetryFn(e, options) {
+          cs.info({
+            message: 'retry start',
+            error: e
+          });
+          /*if (e.errno === 'ECONNREFUSED') {
 										return true;
 									}*/
 
-                return true;
-              }
-            }
-          )()
-        )
-      );
-    });
+          return true;
+        }
+      }
+    )();
   }
 
   /**
    * Deregister the service from consul
-   * @return {Promise} that fullfills when the deregitering has finished
+   * @return {Promise} that fullfills when the deregistering has finished
    */
-  _stop() {
-    return this.consul.agent.service
-      .deregister(this.serviceDefinition.id)
-      .then(f => {
-        if (this._stepRegisteredListener) {
-          this.owner.removeListener(
-            'stepRegistered',
-            this._stepRegisteredListener
-          );
-          this._stepRegisteredListener = undefined;
-        }
-        return Promise.resolve();
-      });
+  async _stop() {
+    await this.consul.agent.service.deregister(this.serviceDefinition.id);
+
+    if (this._stepRegisteredListener !== undefined) {
+      this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
+      this._stepRegisteredListener = undefined;
+    }
   }
 
   /**
@@ -402,12 +401,12 @@ export class ServiceConsul extends Service {
     }
   }
 
-  kronosNodes() {
-    return this.consul.catalog.service
-      .nodes({
-        service: this.serviceDefinition.name
-      })
-      .then(response => response[0]);
+  async kronosNodes() {
+    const response = await this.consul.catalog.service.nodes({
+      service: this.serviceDefinition.name
+    });
+
+    return response[0];
   }
 
   registerService(name, options) {

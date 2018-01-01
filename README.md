@@ -27,9 +27,11 @@ consul: - as a config provider - for service discovery
 ### Table of Contents
 
 -   [ServiceConsul](#serviceconsul)
+    -   [autostart](#autostart)
     -   [\_start](#_start)
     -   [\_stop](#_stop)
     -   [update](#update)
+    -   [name](#name)
 
 ## ServiceConsul
 
@@ -42,6 +44,12 @@ service building a bridge to consul
 -   `config`  
 -   `owner`  
 
+### autostart
+
+Start immediate
+
+Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true
+
 ### \_start
 
 Register the kronos service in consul
@@ -52,7 +60,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Deregister the service from consul
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** that fullfills when the deregitering has finished
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** that fullfills when the deregistering has finished
 
 ### update
 
@@ -61,6 +69,10 @@ Update service definition in consul
 **Parameters**
 
 -   `delay` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** time to wait before doing the unregister/register action
+
+### name
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 'consul'
 
 # install
 
