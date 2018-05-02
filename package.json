@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "kronos-service-health-check": "^2.10.11",
-    "kronos-service-koa": "^3.3.14",
+    "kronos-service-koa": "^4.0.0",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
     "nyc": "^11.7.1",
