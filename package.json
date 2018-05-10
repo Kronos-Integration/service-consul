@@ -43,7 +43,7 @@
     "kronos-service-koa": "^4.0.0",
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
-    "nyc": "^11.7.2",
+    "nyc": "^11.7.3",
     "rollup": "^0.58.2",
     "semantic-release": "^15.4.0",
     "ava": "^0.25.0",
