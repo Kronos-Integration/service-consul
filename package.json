@@ -1,6 +1,9 @@
 {
   "name": "kronos-service-consul",
   "version": "0.0.0-semantic-release",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/service-consul.js",
   "module": "src/service-consul.js",
   "description": "kronos service to integrate with consul",
