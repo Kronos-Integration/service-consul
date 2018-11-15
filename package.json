@@ -73,9 +73,6 @@
       "tests/*-test.js",
       "tests/*-test.mjs"
     ],
-    "presets": [
-      "env"
-    ],
     "require": [
       "esm"
     ],
