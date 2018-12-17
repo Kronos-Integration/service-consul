@@ -45,7 +45,7 @@
     "kronos-service-manager": "^3.5.10",
     "markdown-doctest": "^0.9.1",
     "rollup": "^0.68.0",
-    "semantic-release": "^15.13.0",
+    "semantic-release": "^15.13.1",
     "ava": "^1.0.1",
     "documentation": "^9.0.0",
     "travis-deploy-once": "^5.0.11",
