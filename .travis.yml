@@ -9,7 +9,6 @@ cache: npm
 notifications:
   email:
     - torstenlink@gmx.de
-    - markus.felten@gmx.de
 before_script:
   - ./tests/travis/start_consul.sh
 script:
