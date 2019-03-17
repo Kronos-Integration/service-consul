@@ -7,7 +7,6 @@
 [![Coverage Status](https://coveralls.io/repos/Kronos-Integration/kronos-service-consul/badge.svg)](https://coveralls.io/r/Kronos-Integration/kronos-service-consul)
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/kronos-service-consul/badge.svg)](https://snyk.io/test/github/Kronos-Integration/kronos-service-consul)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/kronos-service-consul.svg?style=flat-square)](https://github.com/Kronos-Integration/kronos-service-consul/issues)
-[![Stories in Ready](https://badge.waffle.io/Kronos-Integration/kronos-service-consul.svg?label=ready&title=Ready)](http://waffle.io/Kronos-Integration/kronos-service-consul)
 [![Dependency Status](https://david-dm.org/Kronos-Integration/kronos-service-consul.svg)](https://david-dm.org/Kronos-Integration/kronos-service-consul)
 [![devDependency Status](https://david-dm.org/Kronos-Integration/kronos-service-consul/dev-status.svg)](https://david-dm.org/Kronos-Integration/kronos-service-consul#info=devDependencies)
 [![docs](http://inch-ci.org/github/Kronos-Integration/kronos-service-consul.svg?branch=master)](http://inch-ci.org/github/Kronos-Integration/kronos-service-consul)
