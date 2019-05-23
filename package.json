@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "ava": "^1.4.1",
-    "c8": "^4.1.4",
+    "c8": "^5.0.1",
     "documentation": "^11.0.0",
     "esm": "^3.2.22",
     "kronos-service-health-check": "^2.10.11",
