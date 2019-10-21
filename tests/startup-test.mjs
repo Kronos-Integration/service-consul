@@ -1,4 +1,4 @@
-import { ServiceConsul, registerWithManager } from '../src/service-consul';
+import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
 import test from 'ava';
 
 const { manager } = require('kronos-service-manager');

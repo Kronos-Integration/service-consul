@@ -1,5 +1,5 @@
 import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
-import { SendEndpoint } from '@kronos-integrtion/endpoint';
+import { SendEndpoint } from '@kronos-integration/endpoint';
 import test from 'ava';
 
 test('consul service', async t => {
