@@ -1,11 +1,11 @@
 {
-  "name": "kronos-service-consul",
+  "name": "@kronos-integration/service-consul",
   "version": "0.0.0-semantic-release",
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/service-consul.js",
-  "module": "src/service-consul.js",
+  "main": "src/service-consul.mjs",
+  "module": "src/service-consul.mjs",
   "description": "kronos service to integrate with consul",
   "keywords": [
     "kronos-service"
@@ -23,16 +23,15 @@
   "license": "BSD-2-Clause",
   "scripts": {
     "cover": "c8 -x 'tests/**/*.mjs' --temp-directory build/tmp ava && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
-    "docs": "documentation readme src/service-consul.js --section=API",
-    "lint": "documentation lint src/service-consul.js",
-    "posttest": "npm run prepare && markdown-doctest",
-    "prepare": "rollup -c",
+    "docs": "documentation readme src/service-consul.mjs --section=API",
+    "lint": "documentation lint src/service-consul.mjs",
+    "posttest": "markdown-doctest",
     "test": "ava"
   },
   "dependencies": {
     "consul": "^0.36.0",
     "koa-route": "^3.2.0",
-    "kronos-service": "^4.17.2",
+    "@kronos-integration/service": "^5.0.0",
     "model-attributes": "^4.0.0",
     "network-address": "^1.1.2",
     "promise-repeat": "^0.4.0"
@@ -43,16 +42,8 @@
     "c8": "^5.0.4",
     "documentation": "^12.1.2",
     "esm": "^3.2.25",
-    "kronos-service-health-check": "^2.10.11",
-    "kronos-service-koa": "^4.0.0",
-    "kronos-service-manager": "^3.5.10",
+    "@kronos-integration/service-koa": "^5.0.0",
     "markdown-doctest": "^1.0.0",
-    "rollup": "^1.25.1",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-executable": "^1.5.1",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "semantic-release": "^15.13.27"
   },
   "engines": {

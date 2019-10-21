@@ -3,9 +3,11 @@ const address = require('network-address'),
   route = require('koa-route'),
   PromiseRepeat = require('promise-repeat');
 
+import url from 'url';
+
 import { mergeAttributes, createAttributes } from 'model-attributes';
-import { ReceiveEndpoint } from 'kronos-endpoint';
-import { Service, defineServiceConsumerProperties } from 'kronos-service';
+import { ReceiveEndpoint } from '@kronos-integration/endpoint';
+import { Service, defineServiceConsumerProperties } from '@kronos-integration/service';
 
 function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
   let watch;

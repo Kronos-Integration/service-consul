@@ -1,30 +1,20 @@
 language: node_js
+notifications:
+  email:
+    - torstenlink@gmx.de
 branches:
   only:
     - master
     - /^greenkeeper/.*$/
     - /^mkpr/.*$/
     - /^npm-template-sync/.*$/
-notifications:
-  email:
-    - torstenlink@gmx.de
-before_script:
-  - ./tests/travis/start_consul.sh
 jobs:
   include:
-    - stage: docs
-      node_js: lts/*
-      skip_cleanup: 'true'
-      script:
-        - npm install -g --production coveralls codecov
-        - npm run cover
-        - codecov
-        - cat ./coverage/lcov.info | coveralls
-        - npm run lint
-        - npm run docs
     - stage: test
       node_js:
         - 12.12.0
+      before_script:
+        - ./tests/travis/start_consul.sh
       script:
         - npm run cover
         - npx codecov

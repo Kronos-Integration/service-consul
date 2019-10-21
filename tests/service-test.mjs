@@ -1,4 +1,4 @@
-import { ServiceConsul, registerWithManager } from '../src/service-consul';
+import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
 import { SendEndpoint } from 'kronos-endpoint';
 import test from 'ava';
 
