@@ -1,10 +1,8 @@
 const address = require('network-address'),
-  url = require('url'),
   route = require('koa-route'),
   PromiseRepeat = require('promise-repeat');
 
-import url from 'url';
-
+import { parse } from 'url';
 import { mergeAttributes, createAttributes } from 'model-attributes';
 import { ReceiveEndpoint } from '@kronos-integration/endpoint';
 import { Service, defineServiceConsumerProperties } from '@kronos-integration/service';
@@ -418,7 +416,7 @@ export class ServiceConsul extends Service {
       options: options
     });
 
-    const u = url.parse(options.url);
+    const u = parse(options.url);
 
     /*
 				const watch = this.consul.watch({

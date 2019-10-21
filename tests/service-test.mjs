@@ -1,8 +1,6 @@
 import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
-import { SendEndpoint } from 'kronos-endpoint';
+import { SendEndpoint } from '@kronos-integrtion/endpoint';
 import test from 'ava';
-
-const { manager } = require('kronos-service-manager');
 
 test('consul service', async t => {
   const m = await manager(
@@ -17,8 +15,6 @@ test('consul service', async t => {
     ],
     [require('kronos-service-health-check'), require('kronos-service-koa')]
   );
-
-  await registerWithManager(m);
 
   const cs = m.services.registry;
 
