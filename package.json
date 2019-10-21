@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@kronos-integration/service-koa": "^5.0.0",
+    "@kronos-integration/service-registry": "^2.0.0",
     "ava": "^2.4.0",
     "builtin-modules": "^3.1.0",
     "c8": "^5.0.4",

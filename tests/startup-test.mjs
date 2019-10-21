@@ -1,10 +1,9 @@
-import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
 import test from 'ava';
-
-const { manager } = require('kronos-service-manager');
+import Registry from '@kronos-integration/service-registry';
+import { ServiceConsul } from '../src/service-consul.mjs';
 
 test('consul service fail to connect', async t => {
-  const m = await manager(
+  const m = new Registry(
     [
       {},
       {
@@ -17,11 +16,11 @@ test('consul service fail to connect', async t => {
           port: 9896
         }
       }
-    ],
-    [require('kronos-service-health-check'), require('kronos-service-koa')]
+    ]
   );
 
-  await registerWithManager(m);
+  registry.add([import('@kronos-integation/service-health-check'), import('@kronos-integation/service-koa')]);
+  registry.add(ServiceConsul);
 
   const cs = m.services.registry;
 

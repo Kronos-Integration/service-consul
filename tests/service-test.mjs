@@ -1,9 +1,11 @@
-import { ServiceConsul, registerWithManager } from '../src/service-consul.mjs';
-import { SendEndpoint } from '@kronos-integration/endpoint';
 import test from 'ava';
+import Registry from '@kronos-integration/service-registry';
+import { ServiceConsul } from '../src/service-consul.mjs';
+import { SendEndpoint } from '@kronos-integration/endpoint';
+
 
 test('consul service', async t => {
-  const m = await manager(
+  const m = new Registry(
     [
       {
         id: 'myId'
@@ -12,9 +14,11 @@ test('consul service', async t => {
         name: 'registry',
         checkInterval: 100
       }
-    ],
-    [require('kronos-service-health-check'), require('kronos-service-koa')]
+    ]
   );
+
+  registry.add([import('@kronos-integation/service-health-check'), import('@kronos-integation/service-koa')]);
+  registry.add(ServiceConsul);
 
   const cs = m.services.registry;
 
