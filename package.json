@@ -30,7 +30,7 @@
     "test": "ava"
   },
   "dependencies": {
-    "@kronos-integration/service": "^5.2.4",
+    "@kronos-integration/service": "^5.2.5",
     "consul": "^0.36.0",
     "koa-route": "^3.2.0",
     "model-attributes": "^4.0.0",
