@@ -1,9 +1,9 @@
+
 node_modules
 build
-coverage
-dist
 *.log
 *.dump
+*.node
 .DS_Store
 .test
 .tmp
