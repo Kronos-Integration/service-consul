@@ -38,7 +38,7 @@
     "promise-repeat": "^0.4.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-koa": "^5.3.2",
+    "@kronos-integration/service-koa": "^5.3.4",
     "@kronos-integration/service-registry": "^2.0.0",
     "ava": "^2.4.0",
     "builtin-modules": "^3.1.0",
