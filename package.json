@@ -53,12 +53,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kronos-Integration/kronos-service-consul.git"
+    "url": "https://github.com/Kronos-Integration/service-consul.git"
   },
   "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-service-consul/issues"
+    "url": "https://github.com/Kronos-Integration/service-consul/issues"
   },
-  "homepage": "https://github.com/Kronos-Integration/kronos-service-consul#readme",
+  "homepage": "https://github.com/Kronos-Integration/service-consul#readme",
   "ava": {
     "files": [
       "tests/*-test.mjs"
