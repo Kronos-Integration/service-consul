@@ -1,5 +1,4 @@
 import test from 'ava';
-import Registry from '@kronos-integration/service-registry';
 import { ServiceConsul } from '../src/service-consul.mjs';
 
 test('consul service fail to connect', async t => {
