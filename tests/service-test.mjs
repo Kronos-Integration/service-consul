@@ -1,7 +1,6 @@
 import test from 'ava';
-import Registry from '@kronos-integration/service-registry';
-import { ServiceConsul } from '../src/service-consul.mjs';
 import { SendEndpoint } from '@kronos-integration/endpoint';
+import { ServiceConsul } from '../src/service-consul.mjs';
 
 
 test('consul service', async t => {

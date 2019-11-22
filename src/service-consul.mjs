@@ -499,12 +499,3 @@ export class ServiceConsul extends Service {
     return undefined;
   }
 }
-
-export function registerWithManager(manager) {
-  return manager.registerServiceFactory(ServiceConsul).then(sf =>
-    manager.declareService({
-      type: sf.name,
-      name: 'registry'
-    })
-  );
-}
