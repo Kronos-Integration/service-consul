@@ -1,63 +1,10 @@
-const address = require('network-address'),
-  route = require('koa-route'),
-  PromiseRepeat = require('promise-repeat');
+PromiseRepeat = require('promise-repeat');
 
 import { parse } from 'url';
 import { mergeAttributes, createAttributes } from 'model-attributes';
 import { ReceiveEndpoint } from '@kronos-integration/endpoint';
 import { Service, defineServiceConsumerProperties } from '@kronos-integration/service';
 
-function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
-  let watch;
-
-  const options = {
-    createOpposite: true
-  };
-
-  options.willBeClosed = () => {
-    owner.trace({
-      endpoint: this.identifier,
-      state: 'close'
-    });
-
-    if (watch) {
-      watch.end();
-      watch = undefined;
-    }
-  };
-
-  options.hasBeenOpened = () => {
-    owner.trace({
-      endpoint: this.identifier,
-      state: 'open'
-    });
-
-    watch = makeWatch();
-    watch.on('change', (data, res) => this.opposite.receive(data));
-    watch.on('error', err =>
-      owner.error({
-        error: err,
-        endpoint: this.identifier
-      })
-    );
-  };
-
-  const ep = new ReceiveEndpoint(name, owner, options);
-
-  ep.receive = request => {
-    if (request) {
-      if (request.update && watch === undefined) {
-      } else if (request.update === false && watch) {
-        watch.end();
-        watch = undefined;
-      }
-    }
-
-    return dataProvider();
-  };
-
-  return ep;
-}
 
 /**
  * service building a bridge to consul
@@ -322,16 +269,6 @@ export class ServiceConsul extends Service {
         this.consul.agent.service
           .register(this.serviceDefinition)
           .then(fullfilled => {
-            this._stepRegisteredListener = step => {
-              this.updateTags();
-              this.update(5000);
-            };
-
-            this.owner.addListener(
-              'stepRegistered',
-              this._stepRegisteredListener
-            );
-
             this.listener.koa.use(
               route.get(this.checkPath, ctx =>
                 this.hcs.endpoints.state
@@ -373,11 +310,6 @@ export class ServiceConsul extends Service {
    */
   async _stop() {
     await this.consul.agent.service.deregister(this.serviceDefinition.id);
-
-    if (this._stepRegisteredListener !== undefined) {
-      this.owner.removeListener('stepRegistered', this._stepRegisteredListener);
-      this._stepRegisteredListener = undefined;
-    }
   }
 
   /**
@@ -466,36 +398,5 @@ export class ServiceConsul extends Service {
     });
 
     //return consul.agent.service.deregister(name);
-  }
-
-  *serviceURLs(name) {
-    let si = [];
-
-    let firstPromise = this.consul.kv
-      .get({
-        key: `services/${name}`,
-        recurse: true
-      })
-      .then(data => {
-        si = data[0].map(d => d.Value);
-        firstPromise = undefined;
-        return si.length === 0 ? Promise.reject() : Promise.resolve(si[0]);
-      });
-
-    while (firstPromise) {
-      yield firstPromise;
-      //console.log(`size: ${si.length} ${firstPromise}`);
-    }
-
-    if (si.length) {
-      for (let i = 1; ; i++) {
-        if (i >= si.length) {
-          i = 0;
-        }
-        //console.log(`yield: ${i} ${si.length}`);
-        yield Promise.resolve(si[i]);
-      }
-    }
-    return undefined;
   }
 }
