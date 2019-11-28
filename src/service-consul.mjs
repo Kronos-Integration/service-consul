@@ -25,8 +25,8 @@ export class ServiceConsul extends Service {
     return true;
   }
 
-  constructor(config, owner) {
-    super(config, owner);
+  constructor(...args) {
+    super(...args);
 
     const svc = this;
 
