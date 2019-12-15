@@ -1,4 +1,4 @@
-function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
+export function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
     let watch;
 
     const options = {
@@ -52,7 +52,7 @@ function createWatchEndpoint(name, owner, makeWatch, dataProvider) {
 
 
 
-async function* serviceURLs(consul,name) {
+export async function* serviceURLs(consul,name) {
     let si = [];
 
     let firstPromise = consul.kv

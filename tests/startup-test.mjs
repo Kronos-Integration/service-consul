@@ -1,31 +1,17 @@
-import test from 'ava';
-import { ServiceConsul } from '../src/service-consul.mjs';
+import test from "ava";
+import { StandaloneServiceProvider } from "@kronos-integration/service";
+import { ServiceConsul } from "../src/service-consul.mjs";
 
-test('consul service fail to connect', async t => {
-  const m = new Registry(
-    [
-      {},
-      {
-        name: 'registry',
-        port: 12345
-      },
-      {
-        name: 'koa-admin',
-        listen: {
-          port: 9896
-        }
-      }
-    ]
-  );
+test("consul service fail to connect", async t => {
+  const sp = new StandaloneServiceProvider();
 
-  registry.add([import('@kronos-integation/service-health-check'), import('@kronos-integation/service-koa')]);
-  registry.add(ServiceConsul);
+  const [consul] = sp.declareServices({
+    consul: {
+      type: ServiceConsul
+    }
+  });
 
-  const cs = m.services.registry;
+  await consul.start();
 
-  try {
-    await cs.start();
-  } catch (e) {
-    t.is(cs.state, 'failed');
-  }
+  t.is(consul.state, "running");
 });

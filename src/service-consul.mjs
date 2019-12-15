@@ -1,10 +1,12 @@
-PromiseRepeat = require('promise-repeat');
+import PromiseRepeat from "promise-repeat";
 
-import { parse } from 'url';
-import { mergeAttributes, createAttributes } from 'model-attributes';
-import { ReceiveEndpoint } from '@kronos-integration/endpoint';
-import { Service, defineServiceConsumerProperties } from '@kronos-integration/service';
-
+import { parse } from "url";
+import { mergeAttributes, createAttributes } from "model-attributes";
+import { ReceiveEndpoint } from "@kronos-integration/endpoint";
+import {
+  Service,
+  defineServiceConsumerProperties
+} from "@kronos-integration/service";
 
 /**
  * service building a bridge to consul
@@ -14,7 +16,7 @@ export class ServiceConsul extends Service {
    * @return {string} 'consul'
    */
   static get name() {
-    return 'consul';
+    return "consul";
   }
 
   /**
@@ -25,6 +27,8 @@ export class ServiceConsul extends Service {
     return true;
   }
 
+  tags = [];
+
   constructor(...args) {
     super(...args);
 
@@ -32,12 +36,12 @@ export class ServiceConsul extends Service {
 
     let watch;
 
-    const nodesEndpoint = new ReceiveEndpoint('nodes', this, {
+    const nodesEndpoint = new ReceiveEndpoint("nodes", this, {
       createOpposite: true,
       willBeClosed() {
         this.trace({
           endpoint: this.identifier,
-          state: 'close'
+          state: "close"
         });
 
         if (watch) {
@@ -48,7 +52,7 @@ export class ServiceConsul extends Service {
       hasBeenOpened() {
         this.trace({
           endpoint: this.identifier,
-          state: 'open'
+          state: "open"
         });
       }
     });
@@ -63,11 +67,11 @@ export class ServiceConsul extends Service {
             }
           });
 
-          watch.on('change', (data, res) => {
+          watch.on("change", (data, res) => {
             console.log(data);
             return nodesEndpoint.opposite.receive(data);
           });
-          watch.on('error', err => svc.error(err));
+          watch.on("error", err => svc.error(err));
         } else if (request.update === false && watch) {
           watch.end();
           watch = undefined;
@@ -80,10 +84,11 @@ export class ServiceConsul extends Service {
     this.addEndpoint(nodesEndpoint);
 
     const options = {
-      key: '',
+      key: "",
       recurse: true
     };
 
+    /*
     this.addEndpoint(
       createWatchEndpoint(
         'kv',
@@ -124,6 +129,7 @@ export class ServiceConsul extends Service {
           })
       )
     );
+    */
   }
 
   get configurationAttributes() {
@@ -138,40 +144,40 @@ export class ServiceConsul extends Service {
     return mergeAttributes(
       createAttributes({
         host: {
-          description: 'consul host',
-          default: 'localhost',
-          type: 'hostname',
+          description: "consul host",
+          default: "localhost",
+          type: "hostname",
           setter: consulOptionSetter
         },
         port: {
-          description: 'consul port',
+          description: "consul port",
           default: 8500,
-          type: 'ip-port',
+          type: "ip-port",
           setter: consulOptionSetter
         },
         secure: {
           default: false,
-          type: 'boolean',
+          type: "boolean",
           setter: consulOptionSetter
         },
         ca: {
           setter: consulOptionSetter,
-          type: 'blob'
+          type: "blob"
         },
         checkPath: {
-          description: 'url path used for the kronos check',
-          type: 'string',
-          default: '/check'
+          description: "url path used for the kronos check",
+          type: "string",
+          default: "/check"
         },
         checkInterval: {
-          description: 'interval the kronos check is called',
+          description: "interval the kronos check is called",
           default: 10,
-          type: 'duration'
+          type: "duration"
         },
         checkTimeout: {
-          description: 'timeout for the kronos check interval',
+          description: "timeout for the kronos check interval",
           default: 5,
-          type: 'duration'
+          type: "duration"
         }
       }),
       Service.configurationAttributes
@@ -204,7 +210,7 @@ export class ServiceConsul extends Service {
 
   get consul() {
     if (!this._consul) {
-      this._consul = require('consul')(this.consulOptions);
+      this._consul = require("consul")(this.consulOptions);
     }
 
     return this._consul;
@@ -218,7 +224,7 @@ export class ServiceConsul extends Service {
     }
 
     return {
-      name: 'kronos',
+      name: "kronos",
       id: this.owner.id,
       port: this.listener.port,
       address: this.listener.address,
@@ -232,10 +238,6 @@ export class ServiceConsul extends Service {
     };
   }
 
-  updateTags() {
-    this.tags = Object.keys(this.owner.steps).map(name => `step:${name}`);
-  }
-
   /**
    * Register the kronos service in consul
    * @return {Promise} that fullfills on succesfull startup
@@ -245,19 +247,13 @@ export class ServiceConsul extends Service {
 
     const cs = this;
 
-    this.updateTags();
-
     // wait until health-check and koa services are present
     await defineServiceConsumerProperties(
       this,
       {
-        listener: {
-          name: 'koa-admin',
-          type: 'koa'
-        },
         hcs: {
-          name: 'health-check',
-          type: 'health-check'
+          name: "health-check",
+          type: "health-check"
         }
       },
       this.owner,
@@ -276,8 +272,8 @@ export class ServiceConsul extends Service {
                   .then(
                     isHealthy =>
                       ([this.status, ctx.body] = isHealthy
-                        ? [200, 'OK']
-                        : [300, 'ERROR'])
+                        ? [200, "OK"]
+                        : [300, "ERROR"])
                   )
               )
             );
@@ -291,7 +287,7 @@ export class ServiceConsul extends Service {
         throttle: 2000,
         boolRetryFn(e, options) {
           cs.info({
-            message: 'retry start',
+            message: "retry start",
             error: e
           });
           /*if (e.errno === 'ECONNREFUSED') {
@@ -343,7 +339,7 @@ export class ServiceConsul extends Service {
 
   registerService(name, options) {
     this.info({
-      message: 'registerService',
+      message: "registerService",
       name: name,
       options: options
     });
@@ -388,7 +384,7 @@ export class ServiceConsul extends Service {
 
   unregisterService(name) {
     this.info({
-      message: 'unregisterService',
+      message: "unregisterService",
       name: name
     });
 
