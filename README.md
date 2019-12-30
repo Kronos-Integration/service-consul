@@ -1,7 +1,7 @@
 [![Build Status](https://secure.travis-ci.org/Kronos-Integration/service-consul.png)](http://travis-ci.org/Kronos-Integration/service-consul)
 [![codecov.io](http://codecov.io/github/Kronos-Integration/service-consul/coverage.svg?branch=master)](http://codecov.io/github/Kronos-Integration/service-consul?branch=master)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![downloads](http://img.shields.io/npm/dm/service-consul.svg?style=flat-square)](https://npmjs.org/package/service-consul)
+[![downloads](http://img.shields.io/npm/dm/@kronos-integration/service-consul.svg?style=flat-square)](https://npmjs.org/package/@kronos-integration/service-consul)
 [![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/service-consul.svg?style=flat-square)](https://github.com/Kronos-Integration/service-consul/issues)
 [![Greenkeeper](https://badges.greenkeeper.io/Kronos-Integration/service-consul.svg)](https://greenkeeper.io/)
 [![Known Vulnerabilities](https://snyk.io/test/github/Kronos-Integration/service-consul/badge.svg)](https://snyk.io/test/github/Kronos-Integration/service-consul)
