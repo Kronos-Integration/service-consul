@@ -28,7 +28,8 @@
     "docs": "documentation readme src/service-consul.mjs --section=API",
     "lint": "documentation lint src/service-consul.mjs",
     "posttest": "markdown-doctest",
-    "test": "ava"
+    "test": "ava",
+    "prepare": "rollup -c"
   },
   "dependencies": {
     "@kronos-integration/service": "^8.3.14",
