@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@kronos-integration/service-koa": "^7.3.8",
-    "ava": "^2.4.0",
+    "ava": "^3.0.0",
     "c8": "^7.0.0",
     "documentation": "^12.1.4",
     "esm": "^3.2.25",
