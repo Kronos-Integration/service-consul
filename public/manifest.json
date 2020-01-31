@@ -1,0 +1,10 @@
+{
+  "name": "@kronos-integration/service-consul",
+  "description": "kronos service to integrate with consul",
+  "icons": [
+    {
+      "src": "facicon.ico",
+      "sizes": "16x16"
+    }
+  ]
+}
