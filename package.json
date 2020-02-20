@@ -24,10 +24,10 @@
   ],
   "license": "BSD-2-Clause",
   "scripts": {
+    "test": "ava && ava --timeout 2m",
     "cover": "c8 -x 'tests/**/*' --temp-directory build/tmp ava --timeout 2m && c8 report -r lcov -o build/coverage --temp-directory build/tmp",
     "docs": "documentation readme src/service-consul.mjs --section=API",
-    "lint": "documentation lint src/service-consul.mjs",
-    "test": "ava && ava --timeout 2m"
+    "lint": "documentation lint src/service-consul.mjs"
   },
   "dependencies": {
     "@kronos-integration/service": "^8.3.16",
