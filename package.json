@@ -30,7 +30,7 @@
     "lint": "documentation lint src/service-consul.mjs"
   },
   "dependencies": {
-    "@kronos-integration/service": "^8.3.20",
+    "@kronos-integration/service": "^8.3.21",
     "consul": "^0.36.0",
     "model-attributes": "^4.1.5",
     "promise-repeat": "^0.4.0"
