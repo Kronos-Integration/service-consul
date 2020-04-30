@@ -3,7 +3,6 @@ jobs:
   include:
     - stage: test
       node_js:
-        - 14.0.0
         - 14.1.0
       before_script:
         - ./tests/travis/start_consul.sh
