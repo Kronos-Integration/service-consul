@@ -39,7 +39,7 @@
     "promise-repeat": "^0.4.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-koa": "^8.0.0",
+    "@kronos-integration/service-http": "^10.1.2",
     "ava": "^3.8.1",
     "c8": "^7.1.2",
     "documentation": "^12.3.0",
