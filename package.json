@@ -8,8 +8,7 @@
   "type": "module",
   "main": "src/service-consul.mjs",
   "exports": {
-    ".": "src/service-consul.mjs",
-    "./": "./"
+    ".": "src/service-consul.mjs"
   },
   "description": "kronos service to integrate with consul",
   "keywords": [
