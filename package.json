@@ -59,7 +59,7 @@
   "template": {
     "inheritFrom": [
       "arlac77/template-github-action",
-      "arlac77/template-kronos-module"
+      "arlac77/template-kronos-component"
     ]
   }
 }
