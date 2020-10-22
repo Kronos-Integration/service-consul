@@ -1,44 +1,7 @@
 name: CI
-'on':
-  - push
+'on': push
 jobs:
-  Tests:
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        node-version:
-          - 14
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macOS-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '${{ matrix.node-version }}'
-      - run: npm i
-      - run: npm run cover
-  Release:
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        node-version:
-          - 14
-        os:
-          - ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '${{ matrix.node-version }}'
-      - run: npm i
-      - run: npx semantic-release
-        env:
-          CI: 'true'
-          NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -47,8 +10,6 @@ jobs:
           - 15.0.1
     steps:
       - uses: actions/checkout@v2
-      - name: checkout
-        uses: actions/checkout@v2
       - name: Cache node modules
         uses: actions/cache@v1
         env:
@@ -69,10 +30,18 @@ jobs:
       - run: npm install
       - run: npm run build --if-present
       - run: npm run cover --if-present
-      - name: Release
-        uses: actions/setup-node@v1
+  release:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.14.0
+      - run: npm install
       - run: npx semantic-release
         env:
-          CI: true
+          CI: 'true'
           NPM_TOKEN: '${{ secrets.NPM_TOKEN }}'
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
