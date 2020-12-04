@@ -34,14 +34,14 @@
     "lint:docs": "documentation lint src/service-consul.mjs && documentation lint ./src/service-consul.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.2.19",
-    "@kronos-integration/service": "^9.2.32",
+    "@kronos-integration/endpoint": "^9.2.20",
+    "@kronos-integration/service": "^9.2.33",
     "consul": "^0.39.0",
     "model-attributes": "^4.1.7",
     "promise-repeat": "^0.4.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-http": "^10.1.18",
+    "@kronos-integration/service-http": "^10.4.9",
     "ava": "^3.13.0",
     "c8": "^7.3.5",
     "documentation": "github:arlac77/documentation",
