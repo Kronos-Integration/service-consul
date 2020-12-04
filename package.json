@@ -60,7 +60,7 @@
   "homepage": "https://github.com/Kronos-Integration/service-consul#readme",
   "template": {
     "inheritFrom": [
-      "arlac77/template-github-action",
+      "arlac77/template-arlac77-github",
       "arlac77/template-kronos-component"
     ]
   }
