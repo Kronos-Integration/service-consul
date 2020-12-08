@@ -41,7 +41,7 @@
     "promise-repeat": "^0.4.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-http": "^10.5.3",
+    "@kronos-integration/service-http": "^10.6.1",
     "ava": "^3.14.0",
     "c8": "^7.3.5",
     "documentation": "github:arlac77/documentation",
