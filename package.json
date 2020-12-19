@@ -33,13 +33,13 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.3.6",
-    "@kronos-integration/service": "^10.1.1",
+    "@kronos-integration/service": "^10.1.2",
     "consul": "^0.39.0",
     "model-attributes": "^4.1.8",
     "promise-repeat": "^0.4.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-http": "^10.6.18",
+    "@kronos-integration/service-http": "^10.6.19",
     "ava": "^3.14.0",
     "c8": "^7.3.5",
     "documentation": "github:arlac77/documentation",
