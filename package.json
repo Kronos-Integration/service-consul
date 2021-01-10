@@ -32,7 +32,7 @@
     "lint:docs": "documentation lint src/service-consul.mjs && documentation lint ./src/service-consul.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.4.0",
+    "@kronos-integration/endpoint": "^9.4.2",
     "@kronos-integration/service": "^10.3.10",
     "consul": "^0.39.0",
     "model-attributes": "^4.1.8",
