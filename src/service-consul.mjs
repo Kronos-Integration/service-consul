@@ -1,6 +1,3 @@
-import PromiseRepeat from "promise-repeat";
-
-import { parse } from "url";
 import { mergeAttributes, createAttributes } from "model-attributes";
 import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import {
@@ -344,7 +341,7 @@ export class ServiceConsul extends Service {
       options: options
     });
 
-    const u = parse(options.url);
+    const u = new URL(options.url);
 
     /*
 				const watch = this.consul.watch({
@@ -371,7 +368,7 @@ export class ServiceConsul extends Service {
 					name: name,
 					id: u.href,
 					address: u.hostname,
-					port: parseInt(u.port, 10),
+					port: u.port,
 					tags: options.tags
 				};
 
