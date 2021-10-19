@@ -41,7 +41,7 @@
   "devDependencies": {
     "@kronos-integration/service-http": "^10.6.78",
     "ava": "^3.15.0",
-    "c8": "^7.9.0",
+    "c8": "^7.10.0",
     "documentation": "^13.2.5",
     "semantic-release": "^18.0.0"
   },
