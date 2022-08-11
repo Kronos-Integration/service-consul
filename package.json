@@ -32,14 +32,14 @@
     "lint:docs": "documentation lint ./src/**/*.mjs"
   },
   "dependencies": {
-    "@kronos-integration/endpoint": "^9.4.32",
-    "@kronos-integration/service": "^10.4.28",
+    "@kronos-integration/endpoint": "^9.4.33",
+    "@kronos-integration/service": "^10.4.29",
     "consul": "^0.40.0",
     "model-attributes": "^4.1.18",
     "promise-repeat": "^0.5.0"
   },
   "devDependencies": {
-    "@kronos-integration/service-http": "^10.6.125",
+    "@kronos-integration/service-http": "^10.6.126",
     "ava": "^4.3.1",
     "c8": "^7.12.0",
     "documentation": "^13.2.5",
