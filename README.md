@@ -21,14 +21,14 @@ kronos service to integrate with consul
 
 ### Table of Contents
 
--   [ServiceConsul](#serviceconsul)
-    -   [Parameters](#parameters)
-    -   [autostart](#autostart)
-    -   [\_start](#_start)
-    -   [\_stop](#_stop)
-    -   [update](#update)
-        -   [Parameters](#parameters-1)
-    -   [name](#name)
+*   [ServiceConsul](#serviceconsul)
+    *   [Parameters](#parameters)
+    *   [autostart](#autostart)
+    *   [\_start](#_start)
+    *   [\_stop](#_stop)
+    *   [update](#update)
+        *   [Parameters](#parameters-1)
+    *   [name](#name)
 
 ## ServiceConsul
 
@@ -38,7 +38,7 @@ service building a bridge to consul
 
 ### Parameters
 
--   `args` **...any** 
+*   `args` **...any**&#x20;
 
 ### autostart
 
@@ -64,7 +64,7 @@ Update service definition in consul
 
 #### Parameters
 
--   `delay` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** time to wait before doing the unregister/register action
+*   `delay` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** time to wait before doing the unregister/register action
 
 ### name
 
