@@ -2,7 +2,8 @@
   "name": "@kronos-integration/service-consul",
   "version": "0.0.0-semantic-release",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "exports": {
     ".": "./src/service-consul.mjs"
