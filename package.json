@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^9.5.7",
-    "@kronos-integration/service": "^11.2.8",
+    "@kronos-integration/service": "^11.2.11",
     "consul": "^2.0.1",
-    "model-attributes": "^4.2.4",
+    "model-attributes": "^4.2.5",
     "promise-repeat": "^0.5.0"
   },
   "devDependencies": {
