@@ -1,4 +1,4 @@
-import { mergeAttributes, createAttributes } from "model-attributes";
+import { prepareAttributesDefinitions } from "pacc";
 import { ReceiveEndpoint } from "@kronos-integration/endpoint";
 import {
   Service,
@@ -129,7 +129,7 @@ export class ServiceConsul extends Service {
     */
   }
 
-  get configurationAttributes() {
+  get attributes() {
     const co = this.consulOptions;
 
     function consulOptionSetter(value, attribute) {
@@ -138,27 +138,27 @@ export class ServiceConsul extends Service {
       }
     }
 
-    return mergeAttributes(
-      createAttributes({
+    return prepareAttributesDefinitions(
+      {
         host: {
           description: "consul host",
           default: "localhost",
           type: "hostname",
-          setter: consulOptionSetter
+          set: consulOptionSetter
         },
         port: {
           description: "consul port",
           default: 8500,
           type: "ip-port",
-          setter: consulOptionSetter
+          set: consulOptionSetter
         },
         secure: {
           default: false,
           type: "boolean",
-          setter: consulOptionSetter
+          set: consulOptionSetter
         },
         ca: {
-          setter: consulOptionSetter,
+          set: consulOptionSetter,
           type: "blob"
         },
         checkPath: {
@@ -176,8 +176,8 @@ export class ServiceConsul extends Service {
           default: 5,
           type: "duration"
         }
-      }),
-      Service.configurationAttributes
+      },
+      Service.attributes
     );
   }
 
