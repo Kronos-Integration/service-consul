@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^10.1.1",
-    "@kronos-integration/service": "^13.1.4",
+    "@kronos-integration/service": "^13.1.5",
     "bullmq": "^5.56.5",
     "consul": "^2.0.1",
     "pacc": "^3.13.2",
