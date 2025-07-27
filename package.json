@@ -33,10 +33,10 @@
   },
   "dependencies": {
     "@kronos-integration/endpoint": "^10.1.1",
-    "@kronos-integration/service": "^13.1.7",
+    "@kronos-integration/service": "^13.1.8",
     "bullmq": "^5.56.5",
     "consul": "^2.0.1",
-    "pacc": "^4.1.0",
+    "pacc": "^4.1.1",
     "promise-repeat": "^0.5.0"
   },
   "devDependencies": {
