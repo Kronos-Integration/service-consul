@@ -35,7 +35,7 @@
     "@kronos-integration/endpoint": "^10.1.18",
     "@kronos-integration/service": "^13.2.33",
     "consul": "^2.0.1",
-    "pacc": "^4.39.0",
+    "pacc": "^4.39.1",
     "promise-repeat": "^0.5.0"
   },
   "devDependencies": {
